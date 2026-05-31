@@ -28,7 +28,7 @@ function numberToWords(num) {
 export default function SalaryManagement() {
   const [employees, setEmployees] = useState([]);
   const [empId, setEmpId] = useState("");
-  const [calc, setCalc] = useState(null);
+  const [, setCalc] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -132,8 +132,8 @@ export default function SalaryManagement() {
  .noprint .btn{display:inline-block;margin-right:8px;background:#3b82f6;color:#fff;border:none;border-radius:6px;padding:8px 14px;cursor:pointer;font-size:13px}
  .noprint .btn.green{background:#22c55e}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"><\/script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"><\/script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 <div class="noprint">
@@ -229,7 +229,7 @@ export default function SalaryManagement() {
       pdf.save('salary-slip-${emp.name.replace(/\\s+/g,"-")}-${periodLong.replace(/\\s+/g,"-")}.pdf');
     });
   }
-<\/script>
+</script>
 </body></html>`;
     openSlip(slipHTML);
   }

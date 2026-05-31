@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./Settinghiru.css";
 import Sidebarhiru from "../Sidebar/Sidebarhiru";
 
@@ -230,6 +230,20 @@ export default function Setting() {
   const mainRef = useRef(null); // <-- scope target
 
   // Apply theme and handle 'auto' + system changes (scoped to Settings only)
+  const showToast = useCallback((message) => {
+    setToast(message);
+    setTimeout(() => setToast(""), 3000);
+  }, []);
+
+  const saveAllChanges = useCallback(() => {
+    setSaving(true);
+    showToast(t.saving);
+    setTimeout(() => {
+      setSaving(false);
+      showToast(t.saved);
+    }, 1000);
+  }, [showToast, t.saving, t.saved]);
+
   useEffect(() => {
     const root = mainRef.current;
     if (!root) return;
@@ -270,13 +284,7 @@ export default function Setting() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  // Toast helper
-  function showToast(message) {
-    setToast(message);
-    setTimeout(() => setToast(""), 3000);
-  }
+  }, [saveAllChanges]);
 
   // Handlers
   function changeTheme(theme) {
@@ -290,15 +298,6 @@ export default function Setting() {
   function toggle(name, value) {
     setToggles((t) => ({ ...t, [name]: value }));
   }
-  function saveAllChanges() {
-    setSaving(true);
-    showToast(t.saving);
-    setTimeout(() => {
-      setSaving(false);
-      showToast(t.saved);
-    }, 1000);
-  }
-
   // Profile image
   function onAvatarFileChange(e) {
     const file = e.target.files?.[0];

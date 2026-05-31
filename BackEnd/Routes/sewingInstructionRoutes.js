@@ -1,5 +1,5 @@
 const express = require("express");
-const ctl = require("../Controllers/sewingInstructionController");
+const ctl = require("../controllers/sewingInstructionController");
 const router = express.Router();
 
 router.get("/",     ctl.list);

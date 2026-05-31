@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./Totebags.css";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
@@ -47,8 +46,6 @@ export default function Totebags() {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [detailsProduct, setDetailsProduct] = useState(null);
   const [toast, setToast] = useState("");
-
-  const navigate = useNavigate();
 
   /* Toast auto-hide */
   useEffect(() => {

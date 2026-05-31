@@ -1,5 +1,5 @@
 const express = require("express");
-const qc = require("../Controllers/qualityController");
+const qc = require("../controllers/qualityController");
 const router = express.Router();
 
 router.get("/",       qc.listQC);

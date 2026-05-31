@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./Settingsanu.css";
 import Sidebar from "../Sidebar/Sidebarsanu";
 
@@ -230,6 +230,20 @@ export default function Setting() {
   const mainRef = useRef(null); // <-- scoped root
 
   // Apply theme (scoped to settings page)
+  const showToast = useCallback((message) => {
+    setToast(message);
+    setTimeout(() => setToast(""), 3000);
+  }, []);
+
+  const saveAllChanges = useCallback(() => {
+    setSaving(true);
+    showToast(t.saving);
+    setTimeout(() => {
+      setSaving(false);
+      showToast(t.saved);
+    }, 1000);
+  }, [showToast, t.saving, t.saved]);
+
   useEffect(() => {
     const root = mainRef.current;
     if (!root) return;
@@ -270,13 +284,7 @@ export default function Setting() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  // Toast
-  function showToast(message) {
-    setToast(message);
-    setTimeout(() => setToast(""), 3000);
-  }
+  }, [saveAllChanges]);
 
   // Handlers
   function changeTheme(theme) {
@@ -290,15 +298,6 @@ export default function Setting() {
   function toggle(name, value) {
     setToggles((t) => ({ ...t, [name]: value }));
   }
-  function saveAllChanges() {
-    setSaving(true);
-    showToast(t.saving);
-    setTimeout(() => {
-      setSaving(false);
-      showToast(t.saved);
-    }, 1000);
-  }
-
   // Profile image
   function onAvatarFileChange(e) {
     const file = e.target.files?.[0];

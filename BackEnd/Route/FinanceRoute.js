@@ -1,6 +1,6 @@
 // BackEnd/Route/FinanceRoute.js
 const express = require("express");
-const { getReceivablesSummary, getPayablesSummary } = require("../Controllers/FinanceSummaryController");
+const { getReceivablesSummary, getPayablesSummary } = require("../controllers/FinanceSummaryController");
 
 const router = express.Router();
 

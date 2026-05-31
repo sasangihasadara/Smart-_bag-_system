@@ -1,7 +1,7 @@
 // BackEnd/Routes/userRouter.js
 const express = require("express");
 const { body } = require("express-validator");
-const userController = require("../Controllers/userController");
+const userController = require("../controllers/userController");
 
 const router = express.Router();
 

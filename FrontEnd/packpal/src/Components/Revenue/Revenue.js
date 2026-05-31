@@ -151,8 +151,6 @@ function Revenue() {
       const endLocal   = new Date(y, m + 1, 0);
       const startISO   = localISODate(startLocal);
       const endISO     = localISODate(endLocal);
-      const monthQs    = `?start=${encodeURIComponent(startISO)}&end=${encodeURIComponent(endISO)}`;
-
       // ---------- Revenue KPI (ALL-TIME: sum of all transactions, refunds excluded) ----------
       try {
         const { data: summary } = await api.get("/transactions/summary");

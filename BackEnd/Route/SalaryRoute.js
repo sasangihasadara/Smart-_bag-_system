@@ -7,7 +7,7 @@ const {
   salarySummary,         // v1
   salarySummaryV2,       // v2 (month-aware payroll)
   contributionsSummaryV2 // v2 (month-aware EPF+ETF)
-} = require("../Controllers/SalaryController");
+} = require("../controllers/SalaryController");
 
 // per-employee preview
 router.get("/calc", calculateSalary);

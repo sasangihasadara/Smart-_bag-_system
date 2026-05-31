@@ -6,7 +6,7 @@ const {
   getAttendanceById,
   updateAttendance,
   deleteAttendance,
-} = require("../Controllers/AttendanceController");
+} = require("../controllers/AttendanceController");
 
 const router = express.Router();
 

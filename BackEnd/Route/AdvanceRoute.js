@@ -7,7 +7,7 @@ const {
   getAdvanceById,
   updateAdvance,
   deleteAdvance,
-} = require("../Controllers/AdvanceController");
+} = require("../controllers/AdvanceController");
 
 const router = express.Router();
 

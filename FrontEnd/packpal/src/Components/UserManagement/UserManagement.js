@@ -197,10 +197,6 @@ export default function UserManagement() {
   }, [users, q, role]);
 
   const today = new Date().toISOString().slice(0, 10);
-  const statTotal = users.length;
-  const statNew = users.filter((u) => String(u.createdAt || "").slice(0, 10) === today).length;
-  const statPending = users.filter((u) => (u.status || "").toLowerCase() === "pending").length;
-
   // Pills
   function pill(status = "") {
     const s = (status || "").toLowerCase();

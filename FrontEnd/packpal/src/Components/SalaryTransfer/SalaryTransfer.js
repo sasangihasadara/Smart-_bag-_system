@@ -1,5 +1,5 @@
 // FrontEnd/src/Components/SalaryTransfer/SalaryTransfer.jsx
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./SalaryTransfer.css";
 import Sidebar from "../Sidebar/Sidebarsanu";
 import { NavLink } from "react-router-dom";
@@ -17,7 +17,7 @@ export default function SalaryTransfer() {
     return 0;
   }
 
-  async function loadTransfers() {
+  const loadTransfers = useCallback(async () => {
     try {
       setLoading(true);
       const { data } = await api.get("/transfers");
@@ -30,7 +30,7 @@ export default function SalaryTransfer() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
   async function markAsPaid(id) {
     try {
@@ -52,7 +52,9 @@ export default function SalaryTransfer() {
     }
   }
 
-  useEffect(() => { loadTransfers(); }, []);
+  useEffect(() => {
+    loadTransfers();
+  }, [loadTransfers]);
 
   return (
     // ✅ Unique page wrapper prevents CSS collisions
