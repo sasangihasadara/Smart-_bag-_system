@@ -1,0 +1,69 @@
+/* Page-scoped variables & reset */
+.orders{
+  --bg-1:#eef3ff; --bg-2:#f6f8ff;
+  --card:#ffffff; --text:#0f1d3a; --muted:#6b7280; --border:#e6e9f4;
+  --ok:#16a34a; --warn:#f59e0b; --danger:#ef4444;
+  --shadow: 0 10px 24px rgba(16, 24, 40, .06);
+
+  min-height: 100vh;
+  font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  color: var(--text);
+  background: linear-gradient(180deg,var(--bg-1),var(--bg-2) 60%);
+  margin-left: 270px;
+}
+.orders *{ box-sizing:border-box }
+
+/* Layout */
+.orders .orders-page{ max-width:1200px; margin:0 auto; padding:32px 22px 56px }
+.orders .page-title{ margin:0 0 18px; font-size:44px; font-weight:800; color:#0e1c44 }
+
+/* Stats */
+.orders .stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-bottom:24px }
+.orders .stat-card{
+  background:var(--card); border:1px solid var(--border); border-radius:16px;
+  padding:22px 24px; box-shadow:var(--shadow)
+}
+.orders .stat-label{ margin:0 0 6px; color:var(--muted); font-weight:600 }
+.orders .stat-value{ margin:0; font-size:42px; font-weight:800 }
+
+/* Table card */
+.orders .table-card{
+  background:var(--card); border:1px solid var(--border);
+  border-radius:18px; box-shadow:var(--shadow); overflow:hidden
+}
+.orders .table-head{
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding:16px 18px; border-bottom:1px solid var(--border)
+}
+.orders .table-head h2{ margin:0; font-size:22px }
+.orders .search input{
+  width:320px; max-width:52vw; padding:12px 14px; border:1px solid var(--border);
+  border-radius:10px; outline:none; font:inherit
+}
+
+.orders .table-wrap{ overflow-x:auto }
+.orders .orders-table{ width:100%; border-collapse:collapse }
+.orders .orders-table thead th{
+  text-align:left; padding:14px 18px; border-bottom:1px solid var(--border); background:#f7f8fe
+}
+.orders .orders-table tbody td{ padding:16px 18px; border-bottom:1px solid #f2f4fa; white-space:nowrap }
+.orders .orders-table tbody tr:last-child td{ border-bottom:none }
+
+.orders .order-id{ color:#243b6b; font-weight:700 }
+.orders .status{
+  display:inline-flex; align-items:center; padding:6px 12px; border-radius:999px;
+  font-size:14px; font-weight:700; border:2px solid transparent
+}
+.orders .status.completed{ color:var(--ok); background:#eaf8ef; border-color:#bce8cb }
+.orders .status.processing{ color:#b7791f; background:#fff5e6; border-color:#f2d7a6 }
+.orders .status.cancelled{ color:var(--danger); background:#ffecee; border-color:#f8b9c0 }
+.orders .empty{ text-align:center; color:var(--muted) }
+
+/* Responsive */
+@media (max-width:980px){ .orders .stats{ grid-template-columns:1fr 1fr } }
+@media (max-width:640px){
+  .orders .stats{ grid-template-columns:1fr }
+  .orders .page-title{ font-size:36px }
+  .orders .table-head{ flex-direction:column; align-items:stretch }
+  .orders .search input{ width:100% }
+}

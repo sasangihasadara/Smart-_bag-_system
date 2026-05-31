@@ -1,0 +1,210 @@
+*{margin:0;padding:0;box-sizing:border-box}
+
+/* ===== Match Accessories palette ===== */
+:root{
+  --hero-text:#0F172A;
+  --hero-text-muted:#334155;
+
+  /* golds */
+  --gold-a:#B78A10;
+  --gold-b:#D8B339;
+  --gold-c:#C69B17;
+
+  /* general UI */
+  --ink:#0f172a; --muted:#64748b; --bg:#f8fafc; --card:#ffffff;
+}
+
+body{
+  font-family:'Segoe UI',Tahoma,Verdana,sans-serif;
+  background:#f8fafc;
+  color:var(--ink);
+  line-height:1.6;
+}
+
+/* ========= Page container ========= */
+.kidsbags-root .kb-wrap{
+  max-width: 1800px;
+  margin: 0 auto 40px;
+  border-radius: 0;      /* full-bleed hero like Accessories */
+  border: none;
+  box-shadow: none;
+  overflow: visible;
+}
+
+/* ========= HERO — same look as Accessories ========= */
+.kidsbags-root .hero{
+  position:relative; overflow:hidden; text-align:center;
+  color:var(--hero-text);
+  padding:8.5rem 2rem 6.5rem;
+  background:
+    radial-gradient(420px 260px at 16% 10%, rgba(212, 217, 226, 0.18), transparent 5%),
+    linear-gradient(180deg, #6c6855 0%, #cbc047 40%, #505bf1 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.65), inset 0 -1px 0 rgba(0,0,0,.06);
+}
+
+/* subtle flecks + vignette */
+.kidsbags-root .hero::before{
+  content:''; position:absolute; inset:0; pointer-events:none; opacity:.55; z-index:0;
+  background:
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><g fill="white" opacity=".14"><circle cx="14" cy="22" r="1"/><circle cx="84" cy="18" r="1"/><circle cx="54" cy="48" r="1"/><circle cx="100" cy="70" r="1"/><circle cx="26" cy="84" r="1"/></g></svg>') repeat,
+    radial-gradient(1200px 520px at 50% -30%, rgba(255,255,255,.22), transparent 62%),
+    linear-gradient(180deg, rgba(0,0,0,.06), transparent 20%, transparent 80%, rgba(0,0,0,.06));
+}
+
+/* soft gold band */
+.kidsbags-root .hero::after{
+  content:''; position:absolute; left:-10%; right:-10%; top:48%; height:140px; pointer-events:none;
+  background:linear-gradient(90deg,var(--gold-a), var(--gold-b) 55%, var(--gold-c));
+  opacity:.12; filter:blur(18px) saturate(110%); z-index:0;
+}
+
+/* Floating dots layer (like Accessories) */
+.kidsbags-root .hero .dots{ position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:1; }
+.kidsbags-root .hero .dot{
+  position:absolute; width:4px; height:4px; background:rgba(255,255,255,.95);
+  border-radius:50%; box-shadow:0 0 8px rgba(255,255,255,.45);
+  opacity:0; animation:kbFloat var(--dur,12s) linear infinite; animation-delay:var(--delay,0s);
+  transform:translateY(100vh) translateX(0);
+}
+.kidsbags-root .hero .dot.sm { width:2px; height:2px; opacity:.85 }
+.kidsbags-root .hero .dot.lg { width:6px; height:6px; opacity:1 }
+
+@keyframes kbFloat{
+  0%   { transform: translateY(110vh) translateX(0) scale(var(--scale,1)); opacity:0; }
+  10%  { opacity:.95; }
+  100% { transform: translateY(-20vh) translateX(var(--dx,40px)) scale(var(--scale,1)); opacity:0; }
+}
+
+.kidsbags-root .hero-content{ position:relative; z-index:2; max-width:860px; margin:0 auto; }
+.kidsbags-root .hero h1{
+  font-size:3rem; font-weight:800; margin-bottom:.8rem; color:var(--hero-text);
+  text-shadow:0 1px 0 rgba(255,255,255,.35);
+}
+.kidsbags-root .hero p{ font-size:1.1rem; color:var(--hero-text-muted); margin-bottom:1.3rem; }
+
+/* Search pill pulled into the hero */
+.kidsbags-root .search-container{ max-width:620px; margin:0 auto; position:relative; }
+
+/* put the icon INSIDE the input by adding right padding and placing the button */
+.kidsbags-root .search-input{
+  width:100%;
+  padding:1.05rem 3.5rem 1.05rem 1.25rem; /* room for the icon button on the right */
+  border:none; border-radius:50px;
+  background:rgba(255,255,255,.98);
+  box-shadow:0 10px 40px rgba(0,0,0,.06);
+  font-size:1.05rem; outline:none;
+}
+
+/* icon button sits inside the input on the right */
+.kidsbags-root .search-btn{
+  position:absolute;
+  top:50%; right:10px; transform:translateY(-50%);
+  width:36px; height:36px; border-radius:50%;
+  border:none; cursor:pointer;
+  color:#fff;
+  background:linear-gradient(135deg,var(--gold-a),var(--gold-c));
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 8px 20px rgba(216,179,57,.25);
+}
+
+/* ========= Main + Filters (chips like Accessories) ========= */
+.kidsbags-root .main-content{ max-width:1400px; margin:0 auto; padding:3rem 2rem; }
+.kidsbags-root .filter-wrap{ display:flex; flex-direction:column; gap:.9rem; margin-bottom:1.8rem; }
+.kidsbags-root .filter-row{ display:flex; flex-wrap:wrap; gap:.75rem; justify-content:center; }
+.kidsbags-root .filter-btn{
+  padding:.7rem 1.4rem; background:#fff; border:2px solid #e2e8f0; border-radius:28px;
+  cursor:pointer; font-weight:700; color:#475569; transition:.2s;
+}
+.kidsbags-root .filter-btn.active{
+  background:linear-gradient(135deg,var(--gold-a),var(--gold-c)); color:#fff; border-color:transparent;
+  box-shadow:0 8px 22px rgba(216,179,57,.25);
+}
+.kidsbags-root .results-info{ text-align:center; margin-top:.4rem; color:var(--muted); }
+
+/* ========= Grid / Cards ========= */
+.kidsbags-root .products-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem;
+}
+.kidsbags-root .product-card{
+  background:#fff; border:1px solid #eef2f7; border-radius:18px; overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,.06); transform:translateY(18px); opacity:0;
+  animation:fadeInUp .6s ease forwards;
+}
+.kidsbags-root .product-card:hover{ transform:translateY(-6px); box-shadow:0 18px 50px rgba(0,0,0,.12); }
+@keyframes fadeInUp{ to{opacity:1; transform:translateY(0)} }
+
+.kidsbags-root .product-media{ position:relative; background:#fff; overflow:hidden; aspect-ratio:4/3; }
+.kidsbags-root .product-media img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s; }
+.kidsbags-root .product-card:hover .product-media img{ transform:scale(1.06); }
+.kidsbags-root .badge{
+  position:absolute; top:12px; left:12px; padding:.35rem .6rem; border-radius:14px; font-size:.75rem; font-weight:800;
+  color:#fff; letter-spacing:.4px; background:linear-gradient(135deg,#ef4444,#dc2626)!important;
+  box-shadow:0 6px 16px rgba(239,68,68,.28);
+}
+
+.kidsbags-root .product-info{ padding:1.1rem 1.2rem 1.2rem; }
+.kidsbags-root .product-category{ font-size:.85rem; font-weight:900; color:#331862; text-transform:uppercase; margin-bottom:.25rem; }
+.kidsbags-root .product-title{ font-size:1.16rem; font-weight:800; margin:.2rem 0 .45rem; }
+
+.kidsbags-root .rating{ display:flex; align-items:center; gap:.4rem; color:#f59e0b; margin-bottom:.55rem; }
+.kidsbags-root .rating .rating-num{ color:#64748b; font-size:.9rem; }
+
+.kidsbags-root .price-row{ display:flex; align-items:center; gap:.7rem; margin:.3rem 0 .8rem; }
+.kidsbags-root .price{ font-size:1.2rem; font-weight:600; color:#0f172a; }
+
+.kidsbags-root .desc{ color:#475569; display:none !important; } /* keep cards compact like Accessories */
+
+.kidsbags-root .actions{ display:flex; gap:.6rem; }
+.kidsbags-root .btn{ border:none; border-radius:12px; cursor:pointer; font-weight:800; transition:.2s; }
+.kidsbags-root .btn-primary{
+  flex:1; padding:.85rem;
+  background:linear-gradient(135deg,var(--gold-a),var(--gold-c)); color:#fff;
+  box-shadow:0 10px 30px rgba(216,179,57,.25);
+}
+.kidsbags-root .btn-secondary{ flex:1; padding:.85rem; background:#fff; border:2px solid #e2e8f0; color:#0f172a; }
+.kidsbags-root .btn-heart{ width:48px; height:48px; background:#f8fafc; border:2px solid #e2e8f0; color:#ef4444; font-size:1.1rem; }
+
+/* ========= Modal ========= */
+.kidsbags-root .modal{ position:fixed; inset:0; background:rgba(0,0,0,.5); backdrop-filter:blur(4px); z-index:2000; display:flex; align-items:center; justify-content:center; }
+.kidsbags-root .modal-content{
+  background:#fff; border-radius:18px; padding:1.5rem; max-width:620px; width:92%; max-height:80vh; overflow:auto;
+  border:1px solid #e5e7eb;
+}
+.kidsbags-root .modal-header{ display:flex; justify-content:space-between; align-items:center; padding-bottom:.8rem; border-bottom:2px solid #eef2f7; margin-bottom:1rem; }
+.kidsbags-root .close-btn{ width:38px; height:38px; border-radius:50%; border:none; background:#f1f5f9; color:#64748b; cursor:pointer; }
+
+.kidsbags-root .detail-top{ display:grid; grid-template-columns:120px 1fr; gap:1rem; align-items:start; }
+.kidsbags-root .detail-top img{ width:120px; height:120px; object-fit:cover; border-radius:14px; border:1px solid #e2e8f0; }
+.kidsbags-root .detail-title{ font-size:1.22rem; font-weight:900; margin-bottom:.2rem; }
+.kidsbags-root .detail-sub{ color:var(--muted); margin:.2rem 0 .6rem; }
+.kidsbags-root .detail-desc{ margin-top:.8rem; color:var(--muted); }
+.kidsbags-root .detail-specs{ margin:.8rem 0 .2rem; padding-left:1.1rem; }
+.kidsbags-root .detail-specs li{ margin:.25rem 0; }
+.kidsbags-root .detail-tags{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.5rem 0 .2rem; }
+.kidsbags-root .tag-chip{ border:2px solid #e2e8f0; background:#fff; border-radius:999px; padding:.35rem .7rem; font-weight:800; font-size:.8rem; color:#331862; }
+.kidsbags-root .detail-actions{ display:flex; gap:.6rem; margin-top:.8rem; }
+
+/* ========= Toast ========= */
+.kidsbags-root .toast{
+  position:fixed; top:26px; right:24px;
+  background:linear-gradient(135deg,#10b981,#059669); color:#fff;
+  padding:.9rem 1.1rem; border-radius:14px; box-shadow:0 10px 30px rgba(16,185,129,.3);
+  transform:translateX(420px); transition:transform .3s; z-index:3000; font-weight:800;
+}
+.kidsbags-root .toast.show{ transform:translateX(0); }
+
+/* Responsive */
+@media (max-width:1024px){
+  .kidsbags-root .main-content{ padding:2.2rem 1.4rem; }
+}
+@media (max-width:768px){
+  .kidsbags-root .hero{ padding-bottom:6rem; }
+  .kidsbags-root .hero h1{ font-size:2.25rem; }
+  .kidsbags-root .main-content{ padding:1.6rem 1rem 2rem; }
+  .kidsbags-root .products-grid{ grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.2rem; }
+  .kidsbags-root .detail-top{ grid-template-columns:1fr; }
+  .kidsbags-root .detail-top img{ width:100%; height:180px; }
+}
+  
+/* Entrance aid */
+.kidsbags-mounted .product-card{opacity:1;transform:translateY(0)}

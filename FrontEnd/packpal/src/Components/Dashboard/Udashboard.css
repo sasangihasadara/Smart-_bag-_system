@@ -1,0 +1,85 @@
+/* Scoped page wrapper to prevent leakage */
+.udb .wrap {
+  margin-left: 280px; /* sidebar width */
+  min-height: 100vh;
+  background: linear-gradient(#eef3ff, #f6f8ff);
+}
+
+.udb .main {
+  padding: 24px;
+}
+
+.udb .title {
+  margin: 0 0 14px;
+  font-size: 34px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.2px;
+}
+
+/* Cards row */
+.udb .cards {
+  display: grid;
+  grid-template-columns: repeat(3, 260px);
+  gap: 16px;
+  align-items: start;
+}
+
+/* Stat tiles */
+.udb .stat {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.02);
+}
+
+.udb .stat__label {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: #64748b;
+  letter-spacing: 0.2px;
+}
+
+.udb .stat__value {
+  font-size: 28px;
+  font-weight: 900;
+  color: #0b2545;
+}
+
+/* Banner tip */
+.udb .banner {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-top: 4px;
+}
+
+.udb .banner .emoji {
+  font-size: 20px;
+}
+
+.udb .banner p {
+  margin: 0;
+  color: #475569;
+}
+
+/* Responsive tweaks */
+@media (max-width: 1100px) {
+  .udb .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 720px) {
+  .udb .wrap {
+    margin-left: 0;
+  }
+  .udb .cards {
+    grid-template-columns: 1fr;
+  }
+}

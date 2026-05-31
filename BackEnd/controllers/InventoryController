@@ -1,0 +1,216 @@
+// BackEnd/Controllers/InventoryController.js
+const Inventory = require("../Model/InventoryModel");
+
+/* local month helpers (kept) */
+const MONTHS__INV = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function buildLastNMonths__INV(n = 12) {
+  const out = [];
+  const now = new Date();
+  for (let i = n - 1; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    out.push({ y: d.getFullYear(), m: d.getMonth() + 1, label: MONTHS__INV[d.getMonth()] });
+  }
+  return out;
+}
+function mergeMonthSeries__INV(buckets, n = 12, valueKey = "value") {
+  const byKey = new Map();
+  for (const b of buckets) byKey.set(`${b._id.y}-${b._id.m}`, b);
+  return buildLastNMonths__INV(n).map(({ y, m, label }) => {
+    const hit = byKey.get(`${y}-${m}`);
+    return { month: label, y, m, [valueKey]: Number(hit?.total || 0), count: Number(hit?.count || 0) };
+  });
+}
+function currentYM__INV() { const d = new Date(); return { y: d.getFullYear(), m: d.getMonth() + 1 }; }
+const toNum = (v, def = 0) => {
+  if (v === "" || v === null || v === undefined) return def;
+  const n = Number(v); return Number.isFinite(n) ? n : def;
+};
+
+const sanitizeCreate = (body) => ({
+  id: String(body.id ?? "").trim(),
+  name: String(body.name ?? "").trim(),
+  description: String(body.description ?? ""),
+  quantity: toNum(body.quantity, 0),
+  unitPrice: toNum(body.unitPrice, 0),
+  avgDailyUsage: toNum(body.avgDailyUsage, 0),
+  leadTimeDays: toNum(body.leadTimeDays, 0),
+  reorderAdj: Math.max(0, toNum(body.reorderAdj, 0)),
+});
+
+const sanitizeUpdate = (body) => {
+  const out = {};
+  if (body.name !== undefined) out.name = String(body.name ?? "").trim();
+  if (body.description !== undefined) out.description = String(body.description ?? "");
+  if (body.quantity !== undefined) out.quantity = toNum(body.quantity, 0);
+  if (body.unitPrice !== undefined) out.unitPrice = toNum(body.unitPrice, 0);
+  if (body.avgDailyUsage !== undefined) out.avgDailyUsage = toNum(body.avgDailyUsage, 0);
+  if (body.leadTimeDays !== undefined) out.leadTimeDays = toNum(body.leadTimeDays, 0);
+  if (body.reorderAdj !== undefined) out.reorderAdj = Math.max(0, toNum(body.reorderAdj, 0));
+  return out;
+};
+const ensureNonNegative = (doc) => {
+  const fields = ["quantity", "unitPrice", "avgDailyUsage", "leadTimeDays", "reorderAdj"];
+  for (const f of fields) if (doc[f] !== undefined && doc[f] < 0) {
+    const e = new Error(`${f} must be >= 0`); e.status = 400; throw e;
+  }
+};
+
+/* ------------------------------ controllers ------------------------------ */
+
+const listInventory = async (_req, res, next) => {
+  try { const items = await Inventory.find().lean(); return res.json({ items }); }
+  catch (err) { return next(err); }
+};
+
+const getByBusinessId = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const item = await Inventory.findOne({ id: String(id).trim() }).lean();
+    if (!item) return res.status(404).json({ message: `Item with id "${id}" not found` });
+    return res.json({ item });
+  } catch (err) { return next(err); }
+};
+
+const createItem = async (req, res, next) => {
+  try {
+    const payload = sanitizeCreate(req.body);
+    if (!payload.id) return res.status(400).json({ message: "id is required" });
+    if (!payload.name) return res.status(400).json({ message: "name is required" });
+    ensureNonNegative(payload);
+    const exists = await Inventory.exists({ id: payload.id });
+    if (exists) return res.status(409).json({ message: `Item with id "${payload.id}" already exists` });
+    const created = await Inventory.create(payload);
+    return res.status(201).json({ item: created });
+  } catch (err) {
+    if (err?.code === 11000) return res.status(409).json({ message: "Duplicate id. Item already exists." });
+    if (err.status) return res.status(err.status).json({ message: err.message });
+    return next(err);
+  }
+};
+
+const updateByBusinessId = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    if (req.body?.id && String(req.body.id).trim() !== String(id).trim())
+      return res.status(400).json({ message: "Changing the item 'id' is not allowed" });
+
+    const updates = sanitizeUpdate(req.body);
+    if (!Object.keys(updates).length) return res.status(400).json({ message: "No valid fields provided for update" });
+    ensureNonNegative(updates);
+
+    const updated = await Inventory.findOneAndUpdate(
+      { id: String(id).trim() }, { $set: updates }, { new: true, runValidators: true }
+    );
+    if (!updated) return res.status(404).json({ message: `Item with id "${id}" not found` });
+    return res.json({ item: updated });
+  } catch (err) {
+    if (err.status) return res.status(err.status).json({ message: err.message });
+    return next(err);
+  }
+};
+
+const removeByBusinessId = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await Inventory.deleteOne({ id: String(id).trim() });
+    if (!result.deletedCount) return res.status(404).json({ message: `Item with id "${id}" not found` });
+    return res.json({ deleted: true });
+  } catch (err) { return next(err); }
+};
+
+/** GET /api/inventory/summary
+ *  - If ?start=YYYY-MM-DD&end=YYYY-MM-DD are provided, returns totals for docs
+ *    whose createdAt fall in that range (fallback to 0).
+ *  - Otherwise returns all-time totals (previous behavior).
+ */
+const summary = async (req, res, next) => {
+  try {
+    const { start, end } = req.query || {};
+    if (start && end) {
+      const buckets = await Inventory.aggregate([
+        {
+          $match: {
+            $expr: { $and: [
+              { $gte: ["$createdAt", new Date(start)] },
+              { $lte: ["$createdAt", new Date(new Date(end).getTime() + 24*60*60*1000 - 1)] },
+            ] }
+          }
+        },
+        {
+          $project: {
+            unit: { $ifNull: ["$unitPrice", { $ifNull: ["$costPrice", { $ifNull: ["$price", 0] }] }] },
+            q: { $ifNull: ["$quantity", { $ifNull: ["$qty", { $ifNull: ["$stock", 0] }] }] },
+          }
+        },
+        { $group: { _id: null, totalValue: { $sum: { $multiply: ["$unit", "$q"] } }, itemCount: { $sum: 1 }, totalQty: { $sum: "$q" } } },
+      ]);
+      const agg = buckets[0] || { totalValue: 0, itemCount: 0, totalQty: 0 };
+      return res.json({ inventory: { totalValue: Math.round(agg.totalValue), totalQty: agg.totalQty, itemCount: agg.itemCount } });
+    }
+
+    // all-time fallback (original behavior)
+    const invDocs = await Inventory.find({}).lean();
+    const inventory = invDocs.reduce(
+      (acc, d) => {
+        const qty  = toNum(d.quantity ?? d.qty ?? d.stock ?? 0);
+        const unit = toNum(d.unitPrice ?? d.costPrice ?? d.price ?? 0);
+        acc.totalValue += unit * qty;
+        acc.totalQty   += qty;
+        acc.itemCount  += 1;
+        return acc;
+      },
+      { totalValue: 0, totalQty: 0, itemCount: 0 }
+    );
+
+    return res.json({ inventory });
+  } catch (err) { return next(err); }
+};
+
+/* --------- existing month-aware summary-v2 (unchanged) ---------- */
+async function summaryV2(req, res, next) {
+  try {
+    const months = Math.max(1, Math.min(24, Number(req.query.months || 12)));
+
+    const buckets = await Inventory.aggregate([
+      {
+        $addFields: {
+          ts: { $ifNull: ["$createdAt", new Date(0)] },
+          unit: { $ifNull: ["$unitPrice", { $ifNull: ["$costPrice", { $ifNull: ["$price", 0] }] }] },
+          q: { $ifNull: ["$quantity", { $ifNull: ["$qty", { $ifNull: ["$stock", 0] }] }] },
+        },
+      },
+      { $group: { _id: { y: { $year: "$ts" }, m: { $month: "$ts" } }, total: { $sum: { $multiply: ["$unit", "$q"] } }, count: { $sum: 1 } } },
+      { $sort: { "_id.y": 1, "_id.m": 1 } },
+    ]);
+
+    const monthly = mergeMonthSeries__INV(buckets, months, "inventory");
+    const { y, m } = currentYM__INV();
+    const thisMonth = monthly.find((r) => r.y === y && r.m === m) || { inventory: 0, count: 0 };
+
+    return res.json({ monthly, currentMonth: { inventory: Number(thisMonth.inventory || 0), count: Number(thisMonth.count || 0), y, m } });
+  } catch (err) { return next(err); }
+}
+
+const adjustReorder = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const delta = Number(req.body?.delta);
+    if (!Number.isFinite(delta)) return res.status(400).json({ message: "delta must be a number" });
+    await Inventory.updateOne({ id: String(id).trim() }, { $inc: { reorderAdj: delta } });
+    await Inventory.updateOne({ id: String(id).trim(), reorderAdj: { $lt: 0 } }, { $set: { reorderAdj: 0 } });
+    const item = await Inventory.findOne({ id: String(id).trim() }).lean();
+    if (!item) return res.status(404).json({ message: `Item with id "${id}" not found` });
+    return res.json({ item });
+  } catch (err) { return next(err); }
+};
+
+module.exports = {
+  listInventory,
+  getByBusinessId,
+  createItem,
+  updateByBusinessId,
+  removeByBusinessId,
+  summary,
+  adjustReorder,
+  summaryV2,
+};

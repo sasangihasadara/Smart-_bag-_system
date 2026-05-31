@@ -1,0 +1,137 @@
+const mongoose = require("mongoose");
+const Finance = require("../Model/FinanceSalaryModel"); // <-- declare ONCE
+
+// GET /finances
+async function getAllFinances(_req, res) {
+  try {
+    const finances = await Finance.find().sort({ createdAt: -1 }).lean().exec();
+    return res.status(200).json({ finances });
+  } catch (err) {
+    console.error("[getAllFinances]", err);
+    return res.status(500).json({ message: "Error fetching finances" });
+  }
+}
+
+// POST /finances
+async function addFinance(req, res) {
+  try {
+    const {
+      EmpId, Emp_Name, Designation, Epf_No,
+      Base_Sal, Bank_Name, branch, Acc_No
+    } = req.body;
+
+    if (!EmpId || !Emp_Name || Base_Sal === undefined) {
+      return res.status(400).json({ message: "EmpId, Emp_Name and Base_Sal are required" });
+    }
+
+    // prevent duplicate EmpId
+    const exists = await Finance.findOne({ EmpId }).lean().exec();
+    if (exists) return res.status(409).json({ message: "EmpId already exists" });
+
+    const finance = await Finance.create({
+      EmpId, Emp_Name, Designation, Epf_No, Base_Sal, Bank_Name, branch, Acc_No
+    });
+    return res.status(201).json(finance);
+  } catch (err) {
+    if (err?.code === 11000) {
+      return res.status(409).json({ message: "EmpId already exists" });
+    }
+    if (err?.name === "ValidationError") {
+      const details = Object.values(err.errors).map(e => e.message).join(", ");
+      return res.status(400).json({ message: details || "Validation error" });
+    }
+    console.error("[addFinance]", err);
+    return res.status(500).json({ message: "Error adding finance record" });
+  }
+}
+
+// GET /finances/:id
+async function getById(req, res) {
+  try {
+    const { id } = req.params;
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid id format" });
+    }
+    const finance = await Finance.findById(id).lean().exec();
+    if (!finance) return res.status(404).json({ message: "Finance record not found" });
+    return res.status(200).json(finance);
+  } catch (err) {
+    console.error("[getById] error:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+}
+
+// PUT /finances/:id
+async function updateFinance(req, res) {
+  try {
+    const { id } = req.params;
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid id format" });
+    }
+
+    const allowed = [
+      "EmpId","Emp_Name","Designation","Epf_No",
+      "Base_Sal","Bank_Name","branch","Acc_No"
+    ];
+    const updates = {};
+    for (const k of allowed) if (k in req.body) updates[k] = req.body[k];
+
+    const updated = await Finance.findByIdAndUpdate(
+      id,
+      { $set: updates },
+      { new: true, runValidators: true }
+    ).exec();
+
+    if (!updated) return res.status(404).json({ message: "Finance record not found" });
+    return res.status(200).json(updated);
+  } catch (err) {
+    if (err?.code === 11000) {
+      return res.status(409).json({ message: "EmpId already exists" });
+    }
+    if (err?.name === "ValidationError") {
+      const details = Object.values(err.errors).map(e => e.message).join(", ");
+      return res.status(400).json({ message: details || "Validation error" });
+    }
+    console.error("[updateFinance] error:", err);
+    return res.status(500).json({ message: "Server error while updating finance" });
+  }
+}
+
+// DELETE /finances/:id
+async function deleteFinance(req, res) {
+  try {
+    const { id } = req.params;
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid id format" });
+    }
+    const deleted = await Finance.findByIdAndDelete(id).exec();
+    if (!deleted) return res.status(404).json({ message: "Finance record not found" });
+    return res.status(200).json({ message: "Finance deleted successfully" });
+  } catch (err) {
+    console.error("[deleteFinance] error:", err);
+    return res.status(500).json({ message: "Unable to delete finance" });
+  }
+}
+
+// GET /finances/min-list  (EmpId, Emp_Name, Base_Sal for dropdowns/compute)
+async function minList(_req, res) {
+  try {
+    const employees = await Finance.find(
+      {},
+      { EmpId: 1, Emp_Name: 1, Base_Sal: 1, _id: 0 }
+    ).sort({ EmpId: 1 }).lean().exec();
+    return res.status(200).json({ employees });
+  } catch (err) {
+    console.error("[finances:min-list]", err);
+    return res.status(500).json({ message: "Failed to load employee list" });
+  }
+}
+
+module.exports = {
+  getAllFinances,
+  addFinance,
+  getById,
+  updateFinance,
+  deleteFinance,
+  minList,
+};

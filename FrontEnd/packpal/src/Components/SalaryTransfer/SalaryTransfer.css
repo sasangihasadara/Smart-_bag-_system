@@ -1,0 +1,112 @@
+/* ===== Unique page scope ===== */
+.salary-transfer-page { background:#f6f7fb; min-height:100vh; }
+
+/* Layout offset for sidebar */
+.salary-transfer-page .salarycal { padding-left:280px; }
+@media (max-width:1024px){ .salary-transfer-page .salarycal{ padding-left:0; } }
+
+/* Container */
+.salary-transfer-page .container{
+  max-width:1400px; margin:0 auto; background:rgba(255,255,255,.95);
+  border-radius:20px; padding:30px; box-shadow:0 20px 40px rgba(0,0,0,.1);
+}
+
+/* Header */
+.salary-transfer-page .container h1{
+  text-align:center; margin-bottom:30px; font-size:2.2rem; font-weight:700;
+  margin-left: 130px;
+  background:linear-gradient(45deg,#000,#000);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text; color:#2c3e50;
+}
+
+/* Section */
+.salary-transfer-page .section{
+  background:#fff; border-radius:15px; padding:25px; margin-bottom:25px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08); border:1px solid rgba(102,126,234,.1);
+}
+.salary-transfer-page .section h2{
+  font-size:1.6rem; margin-bottom:20px; padding-bottom:10px; color:#2c3e50; border-bottom:3px solid #667eea;
+  
+}
+
+/* Tabs */
+.salary-transfer-page .section .nav{
+  margin:15px 0; padding:10px; background:#f9f9ff; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,.05);
+  display:flex; flex-wrap:wrap; gap:12px;
+}
+.salary-transfer-page .section .tab-btn{
+  padding:8px 16px; border-radius:6px; background:#e5e7eb; color:#1f2937; border:none; transition:all .3s ease;
+  text-decoration:none; display:inline-flex; align-items:center; justify-content:center;
+}
+.salary-transfer-page .section .tab-btn:hover{ background:#dbeafe; }
+.salary-transfer-page .section .tab-btn.active{
+  background:linear-gradient(45deg,#667eea,#764ba2); color:#fff;
+}
+
+/* Forms */
+.salary-transfer-page .form-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:15px; margin-bottom:20px;
+}
+.salary-transfer-page .form-group{ display:flex; flex-direction:column; }
+.salary-transfer-page label{ font-weight:600; color:#2c3e50; margin-bottom:5px; }
+.salary-transfer-page input,
+.salary-transfer-page select{
+  padding:12px; border:2px solid #e0e6ed; border-radius:8px; font-size:14px; transition:.3s;
+}
+.salary-transfer-page input:focus,
+.salary-transfer-page select:focus{
+  outline:none; border-color:#667eea; box-shadow:0 0 0 3px rgba(102,126,234,.1);
+}
+
+/* Buttons */
+.salary-transfer-page .btn{
+  padding:12px 24px; border:none; border-radius:25px; cursor:pointer; font-weight:600;
+  transition:transform .3s, box-shadow .3s; margin:5px;
+}
+.salary-transfer-page .btn:hover{ transform:translateY(-2px); box-shadow:0 10px 20px rgba(0,0,0,.2); }
+.salary-transfer-page .btn-primary{ background:linear-gradient(45deg,#e41717,#e41717); color:#fff; }
+.salary-transfer-page .btn-success{ background:linear-gradient(45deg,#1e7b35,#1e7b35); color:#fff; }
+.salary-transfer-page .btn-warning{ background:linear-gradient(45deg,#e41717,#e41717); color:#fff; }
+.salary-transfer-page .btn-danger{  background:linear-gradient(45deg,#e41717,#e41717); color:#fff; }
+
+/* Table */
+.salary-transfer-page table{
+  width:100%; border-collapse:collapse; margin-top:20px; background:#fff; border-radius:10px; overflow:hidden;
+  box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+.salary-transfer-page th{
+  background:linear-gradient(45deg,#354fc5,#15122f); color:#fff; padding:15px; text-align:left; font-weight:600;
+}
+.salary-transfer-page td{ padding:15px; border-bottom:1px solid #e0e6ed; }
+.salary-transfer-page tbody tr:hover{ background:#f8f9ff; }
+
+.salary-transfer-page .actions{
+  display:flex; gap:10px; justify-content:center; align-items:center;
+}
+.salary-transfer-page .actions .btn{
+  padding:8px 16px; margin:0; border-radius:8px; font-size:.85rem; box-shadow:none;
+}
+
+/* Status badges */
+.salary-transfer-page .status-badge{ padding:4px 10px; border-radius:999px; font-size:.8rem; font-weight:700; }
+.salary-transfer-page .status-paid{ background:#cbf3b1; color:#166534; }
+.salary-transfer-page .status-pending{ background:#fee2e2; color:#b91c1c; }
+
+/* Modal */
+.salary-transfer-page .salary-modal{
+  display:none; position:fixed; z-index:1000; inset:0; background:rgba(0,0,0,.5); backdrop-filter:blur(5px);
+}
+.salary-transfer-page .salary-modal-content{
+  background:#fff; margin:10% auto; padding:30px; border-radius:20px; width:90%; max-width:500px;
+  box-shadow:0 20px 40px rgba(0,0,0,.3);
+}
+.salary-transfer-page .salary-modal-close{ color:#aaa; float:right; font-size:28px; font-weight:700; cursor:pointer; }
+.salary-transfer-page .salary-modal-close:hover{ color:#000; }
+
+/* Responsive */
+@media (max-width:768px){
+  .salary-transfer-page .salarycal{ padding-left:0; }
+  .salary-transfer-page .form-grid{ grid-template-columns:1fr; }
+  .salary-transfer-page .section .nav{ flex-direction:column; }
+}

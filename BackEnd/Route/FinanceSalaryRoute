@@ -1,0 +1,101 @@
+// Routes/SalaryRoute.js
+const express = require("express");
+const {
+  getAllFinances,
+  addFinance,
+  getById,
+  updateFinance,
+  deleteFinance,
+  minList,
+} = require("../Controllers/FinanceSalaryController");
+
+// Used for fallback & to reach the same DB connection
+const FinanceSalary = require("../Model/FinanceSalaryModel");
+
+const router = express.Router();
+
+/* ---------------- Minimal list for dropdowns & compute ---------------- */
+router.get("/min-list", minList);
+
+/* --------------------------------- CRUD -------------------------------- */
+router.get("/", getAllFinances);
+router.post("/", addFinance);
+router.get("/:id", getById);
+router.put("/:id", updateFinance);
+router.delete("/:id", deleteFinance);
+
+/* ----------------- SMART: NET salary total (for dashboard) -------------- */
+/**
+ * GET /salary/summary
+ * Tries to sum NET salary from a real payroll collection (salaries/salary/payslips/payrolls/payroll).
+ * Falls back to summing Base_Sal from FinanceSalary if no payroll collection exists.
+ * Returns: { totalNet, employeesCount, source }
+ */
+router.get("/summary", async (_req, res) => {
+  try {
+    const db = FinanceSalary.db; // same mongoose connection
+    const collNames = (await db.listCollections().toArray()).map(c => c.name);
+
+    // Most likely payroll collection names in order of preference
+    const candidates = ["salaries", "salary", "payslips", "payrolls", "payroll"];
+    const target = candidates.find(name => collNames.includes(name));
+
+    const sumNetFromCollection = async (name) => {
+      // Sum any of these net fields after coercion to number
+      // totalNet = Net_Sal + NetSalary + NetPay + net + net_salary + NET_SAL (whichever exists per doc)
+      const pipeline = [
+        {
+          $addFields: {
+            _n1: { $toDouble: { $ifNull: ["$Net_Sal", 0] } },
+            _n2: { $toDouble: { $ifNull: ["$NetSalary", 0] } },
+            _n3: { $toDouble: { $ifNull: ["$NetPay", 0] } },
+            _n4: { $toDouble: { $ifNull: ["$net", 0] } },
+            _n5: { $toDouble: { $ifNull: ["$net_salary", 0] } },
+            _n6: { $toDouble: { $ifNull: ["$NET_SAL", 0] } },
+          },
+        },
+        {
+          $addFields: {
+            _net: { $add: ["$_n1", "$_n2", "$_n3", "$_n4", "$_n5", "$_n6"] },
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            totalNet: { $sum: "$_net" },
+            employeesCount: { $sum: 1 },
+          },
+        },
+      ];
+
+      const out = await db.collection(name).aggregate(pipeline).toArray();
+      const row = out[0] || { totalNet: 0, employeesCount: 0 };
+      return {
+        totalNet: Math.round(Number(row.totalNet || 0)),
+        employeesCount: Number(row.employeesCount || 0),
+        source: name,
+      };
+    };
+
+    if (target) {
+      const result = await sumNetFromCollection(target);
+      return res.json(result);
+    }
+
+    // ---- Fallback: no payroll collection found; sum Base_Sal from FinanceSalary
+    const docs = await FinanceSalary.find({}, { Base_Sal: 1 }).lean();
+    const totalNet = Math.round(
+      docs.reduce((s, d) => s + (Number(d?.Base_Sal) || 0), 0)
+    );
+    return res.json({
+      totalNet,
+      employeesCount: docs.length,
+      source: "FinanceSalary(Base_Sal) fallback",
+    });
+  } catch (e) {
+    console.error("[salary:summary]", e);
+    res.status(500).json({ message: "Failed to load salary summary" });
+  }
+});
+
+module.exports = router;

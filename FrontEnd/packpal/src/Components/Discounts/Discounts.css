@@ -1,0 +1,167 @@
+/* ====== Page wrap (scoped) ======================================= */
+.page-wrap.discounts-page{
+  /* Theme tokens (scoped, not global) */
+  --bg:#f1f5f9;
+  --card:#fff;
+  --text:#0f172a;
+  --muted:#637087;
+  --border:#e5e7eb;
+  --primary:#2563eb;
+  --danger:#ef4444;
+  --ok:#16a34a;
+
+  --sidebar-w: 260px;   /* match your Sidebarsa width */
+  --container-w: 1100px;
+
+  /* Light-blue table tokens */
+  --tbl-bg:#f0f7ff;
+  --tbl-header:#e3efff;
+  --tbl-border:#c7ddff;
+  --tbl-ink:#0f172a;
+  --tbl-muted:#385ea8;
+  --tbl-hover:#e9f2ff;
+  --tbl-zebra:#f6faff;
+
+  display:flex;               /* sidebar + main */
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* Sidebar column (assumes your component outputs .sidebar) */
+.page-wrap.discounts-page .sidebar{
+  width:var(--sidebar-w);
+  flex:0 0 var(--sidebar-w);
+  background:#fff;
+  border-right:1px solid var(--border);
+}
+
+/* Main column */
+.discounts-main{
+  flex:1 1 auto;
+  min-width:0;
+  padding:20px;
+  /* If your sidebar is fixed elsewhere, keep this.
+     If not fixed, you can remove this next line. */
+  margin-left:270px;
+}
+
+/* Centered content column */
+.discounts-main .container{
+  max-width:var(--container-w);
+  margin:0 auto;
+}
+
+/* Heading & subtitle */
+.discounts-main .page-title{
+  margin:0 0 8px;
+  font-size:48px;
+  font-weight:900;
+  letter-spacing:.01em;
+  line-height:1.1;
+  text-align:left;
+}
+.discounts-main .muted{ color:var(--muted); font-size:13px; }
+
+/* Card / section */
+.discounts-main .section{
+  background:#fff; border:1px solid var(--border); border-radius:16px;
+  overflow:hidden; box-shadow:0 1px 2px rgba(0,0,0,.05); margin:18px 0;
+}
+.discounts-main .head{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:16px 18px; border-bottom:1px solid var(--border);
+}
+.discounts-main .body{ padding:18px; }
+
+/* Form row */
+.discounts-main .form-wrapper{ display:flex; justify-content:flex-start; padding:4px 0; }
+.discounts-main .grid{ display:grid; gap:14px; }
+.discounts-main .grid.grid-3{
+  grid-template-columns:1.2fr 1fr 1fr;
+  width:100%;
+  max-width:100%;
+}
+
+.discounts-main label{ display:block; font-size:12px; color:#475569; margin-bottom:6px; font-weight:700; }
+.discounts-main select,
+.discounts-main input{
+  width:100%; padding:12px 14px; border:1px solid var(--border);
+  border-radius:12px; outline:0; font:inherit; background:#fff;
+}
+
+/* Buttons */
+.discounts-main .actions{
+  display:flex; gap:12px; flex-wrap:wrap;
+  justify-content:flex-start;
+  margin-top:10px;
+}
+.discounts-main .btn{
+  display:inline-flex; align-items:center; gap:8px; padding:10px 14px;
+  border-radius:12px; border:1px solid var(--border); background:#fff;
+  cursor:pointer; font-weight:700;
+  transition:filter .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+.discounts-main .btn:hover{ filter:brightness(.97); transform:translateY(-1px); box-shadow:0 8px 18px rgba(2,6,23,.06); }
+.discounts-main .btn.green{ background:var(--ok); color:#fff; border-color:var(--ok); }
+.discounts-main .btn.red{ background:var(--danger); color:#fff; border-color:var(--danger); }
+
+/* ===================== LIGHT-BLUE TABLE ========================= */
+.discounts-main .table-wrap{ overflow:auto; background:#fff; }
+
+.discounts-main table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  table-layout:fixed;
+  color:var(--tbl-ink);
+}
+
+.discounts-main thead th{
+  background:var(--tbl-header);
+  color:var(--tbl-muted);
+  text-transform:uppercase;
+  font-size:12px;
+  letter-spacing:.04em;
+  padding:12px 14px;
+  border-bottom:1px solid var(--tbl-border);
+  position:sticky; top:0; z-index:1;
+}
+
+.discounts-main th,
+.discounts-main td{
+  padding:12px 14px;
+  border-bottom:1px solid var(--tbl-border);
+  text-align:left; vertical-align:top; font-size:14px;
+  white-space:normal; word-break:break-word; overflow-wrap:anywhere;
+}
+
+.discounts-main tbody td{ background:var(--tbl-bg); }
+.discounts-main tbody tr:nth-child(odd) td{ background:var(--tbl-zebra); }
+.discounts-main tbody tr:hover td{ background:var(--tbl-hover); }
+
+.discounts-main .right{ text-align:right; }
+
+/* Errors */
+.discounts-main .error{
+  background:#fee2e2; border:1px solid #fecaca; color:#991b1b;
+  padding:10px 12px; border-radius:10px;
+}
+
+/* Responsive */
+@media (max-width:1200px){
+  .page-wrap.discounts-page{ --container-w:960px; }
+}
+@media (max-width:1024px){
+  .page-wrap.discounts-page{ flex-direction:column; }
+  .page-wrap.discounts-page .sidebar{
+    width:100%; flex:0 0 auto; border-right:0; border-bottom:1px solid var(--border);
+  }
+  .discounts-main{ padding:16px; margin-left:0; }
+  .page-wrap.discounts-page{ --container-w:760px; }
+  .discounts-main .grid.grid-3{ grid-template-columns:1fr; }
+}
+@media (max-width:640px){
+  .page-wrap.discounts-page{ --container-w:92vw; }
+  .discounts-main .page-title{ font-size:36px; }
+}

@@ -1,0 +1,177 @@
+/* ==========================================
+   Sidebar (scoped) + page wrap helpers
+   ========================================== */
+.sbx {
+  /* Adjust this to your sidebar width; pages can read this var. */
+  --sidebar-w: 280px;
+}
+
+/* Optional helper: if a page wants to align beside the sidebar
+   it can use `.sbx + .page` or set margin-left: var(--sidebar-w) */
+.sbx + .page,
+.page.with-sidebar {
+  margin-left: var(--sidebar-w);
+  width: calc(100vw - var(--sidebar-w));
+}
+
+/* ---------- Mobile hamburger ---------- */
+.sbx .mobile-menu {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1200;
+  display: none;                 /* hidden on desktop */
+  width: 42px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.08);
+  background: #ffffffcc;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.08);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 8px;
+}
+.sbx .mobile-menu .bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #111827;
+  border-radius: 2px;
+}
+@media (max-width: 1024px) {
+  .sbx .mobile-menu { display: inline-flex; }
+}
+
+/* ---------- Sidebar panel ---------- */
+.sbx .sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(15px);
+  box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+  border-radius: 0 80px 0 0;
+  z-index: 1100;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+
+/* Desktop: visible */
+@media (min-width: 1025px) {
+  .sbx .sidebar { transform: translateX(0); }
+}
+
+/* Tablet/Mobile: off-canvas by default */
+@media (max-width: 1024px) {
+  .sbx .sidebar {
+    transform: translateX(-105%);
+  }
+  .sbx .sidebar.active {
+    transform: translateX(0);
+  }
+}
+
+/* ---------- Header ---------- */
+.sbx .sidebar-header {
+  padding: 30px 25px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  text-align: center;
+  background: linear-gradient(135deg,#354fc5,#15122f);
+  color: #fff;
+}
+.sbx .sidebar-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 50px;
+  margin-right: 20px;
+  margin-top: 30px;
+}
+.sbx .sidebar-header p {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-top: -25px;
+}
+
+/* ---------- Nav ---------- */
+.sbx .sidebar-nav { padding: 20px 0; }
+.sbx .nav-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 25px;
+  color: #0e141c;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+  font-weight: 500;
+}
+.sbx .nav-item i {
+  width: 24px;
+  margin-right: 15px;
+  font-size: 1.1rem;
+}
+.sbx .nav-item:hover {
+  background: rgba(102,126,234,0.1);
+  border-left-color: #667eea;
+  color: #667eea;
+  transform: translateX(5px);
+}
+.sbx .nav-item.active {
+  background: rgba(102,126,234,0.15);
+  border-left-color: #667eea;
+  color: #667eea;
+}
+.sbx .nav-divider {
+  height: 1px;
+  background: rgba(0,0,0,0.1);
+  margin: 15px 25px;
+}
+
+/* ---------- Logout ---------- */
+.sbx .logout-section {
+  position: sticky;     /* keep at the end of list; use sticky so it stays visible */
+  bottom: 0;
+  padding: 16px 25px 24px;
+  background: linear-gradient(0deg, #fff 60%, rgba(255,255,255,0.7) 100%);
+}
+.sbx .logout-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.sbx .logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(239,68,68,0.4);
+}
+.sbx .logout-btn i { margin-right: 10px; }
+
+/* ---------- Nice scrolling ---------- */
+.sbx .sidebar::-webkit-scrollbar { width: 10px; }
+.sbx .sidebar::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.12);
+  border-radius: 20px;
+}
+.sbx .sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------- Page wrap for small screens ---------- */
+@media (max-width: 1024px) {
+  /* If your page container uses .page.with-sidebar, remove the left margin when sidebar is off-canvas */
+  .page.with-sidebar {
+    margin-left: 0;
+    width: 100vw;
+  }
+}

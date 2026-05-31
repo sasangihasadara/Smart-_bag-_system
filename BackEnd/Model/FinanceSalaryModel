@@ -1,0 +1,24 @@
+// models/FinanceSalaryModel.js
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
+
+const financeSchema = new Schema(
+  {
+    EmpId:       { type: String, required: true },
+    Emp_Name:    { type: String, required: true },
+    Designation: { type: String },
+    Epf_No:      { type: String },
+    Base_Sal:    { type: Number, required: true, min: 0 },
+    Bank_Name:   { type: String },
+    branch:      { type: String },
+    Acc_No:      { type: String },
+  },
+  { timestamps: true, versionKey: false }
+);
+
+financeSchema.index({ EmpId: 1 }, { unique: true });
+
+// IMPORTANT: force the collection name
+module.exports =
+  mongoose.models.FinanceSalary ||
+  mongoose.model("FinanceSalary", financeSchema, "financesalarymodels");

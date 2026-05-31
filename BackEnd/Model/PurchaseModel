@@ -1,0 +1,54 @@
+// BackEnd/Model/PurchaseModel.js
+const mongoose = require("mongoose");
+
+const PurchaseSchema = new mongoose.Schema(
+  {
+    // Business-friendly ID like "O-001"
+    id:        { type: String, required: true, unique: true, index: true },
+
+    // Supplier
+    supplier:  { type: String, required: true },
+
+    // Normalized item fields
+    itemId:    { type: String, required: true, index: true },
+    itemName:  { type: String, required: true },
+    quantity:  { type: Number, required: true, min: 1 },
+
+    // Legacy flexible field (kept for compatibility)
+    items:     { type: mongoose.Schema.Types.Mixed, default: "" },
+
+    // Dates
+    orderDate:    { type: Date, default: Date.now },
+    deliveryDate: { type: Date },
+
+    // Workflow status
+    status: {
+      type: String,
+      enum: ["pending", "approved", "delivered", "cancelled"],
+      default: "pending",
+      index: true,
+    },
+
+    // Optional priority
+    priority: { type: String, enum: ["normal", "high", "urgent"], default: "normal" },
+
+    // Optional notes
+    notes: { type: String, default: "" },
+
+    // ✅ Set once inventory increment for delivered order has been applied
+    receivedApplied: { type: Boolean, default: false },
+
+    // Legacy totals
+    total:      { type: Number },
+    amount:     { type: Number },
+    grandTotal: { type: Number },
+    date:       { type: Date },
+  },
+  { timestamps: true, versionKey: false }
+);
+
+PurchaseSchema.index({ supplier: "text", id: "text", itemName: "text", itemId: "text" });
+
+module.exports =
+  mongoose.models.Purchase ||
+  mongoose.model("Purchase", PurchaseSchema, "purchases");

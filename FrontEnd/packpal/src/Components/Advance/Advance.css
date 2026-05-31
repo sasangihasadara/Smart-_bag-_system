@@ -1,0 +1,236 @@
+/* ===========================
+   Advance Page Styles (scoped)
+   EXACT match to SalaryCal.css
+   =========================== */
+
+/* Layout wrapper */
+.advance { padding-left: 280px; }
+@media (max-width: 1024px) { .advance { padding-left: 0; } }
+
+/* Container */
+.advance .container {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* Header */
+.advance .container h1{
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  margin-left: 260px;
+}
+.advance .container p{
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-left: 330px;
+}
+
+/* Tabs inside section */
+.advance .section .nav {
+  margin: 15px 0;
+  padding: 10px;
+  background: #ffffff;
+  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.advance .section .tab-btn {
+  padding: 13px 30px;
+  border-radius: 5px;
+  background: #ffffff;
+  font-weight: 700;
+  color: #1f2937;
+  border: none;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.advance .section .tab-btn:hover {
+  background: rgba(102,126,234,0.1);
+  color: #667eea;
+}
+.advance .section .tab-btn.active {
+  background: linear-gradient(45deg,#354fc5,#15122f);
+  color: #fff;
+}
+
+/* Section wrapper */
+.advance .section {
+  background: #fff;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  border: 1px solid rgba(102,126,234,.1);
+}
+.advance .section h2 {
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  color: #2c3e50;
+  border-bottom: 3px solid #667eea;
+}
+
+/* Form grid (for any inline forms you add later) */
+.advance .form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+.advance .form-group { display: flex; flex-direction: column;}
+.advance label { font-weight: 600; color: #2c3e50; margin-bottom: 5px; }
+.advance input,
+.advance select {
+  padding: 12px;
+  border: 2px solid #e0e6ed;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: .3s;
+  background: #fff;
+  padding-top: 5px;
+}
+.advance input:focus,
+.advance select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102,126,234,.1);
+}
+
+/* Buttons */
+.advance .btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform .3s ease, box-shadow .3s ease;
+  margin: 5px;
+  color: #fff;
+  margin-left: 940px;        /* same as SalaryCal */
+}
+.advance .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,.2); }
+.advance .btn-primary { background: linear-gradient(45deg,#354fc5,#15122f); }
+.advance .btn-success { background: linear-gradient(45deg,#11998e,#38ef7d); }
+.advance .btn-warning { background: linear-gradient(45deg,#22b845,#1bb82a); }
+.advance .btn-danger  { background: linear-gradient(45deg,#e72121,#e72121); }
+
+/* Table */
+.advance table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,.08);
+}
+.advance th {
+  background: linear-gradient(45deg,#354fc5,#15122f);
+  color: #fff;
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+}
+.advance td { padding: 15px; border-bottom: 1px solid #e0e6ed; }
+.advance tbody tr:hover { background: #f8f9ff; }
+.advance .actions { display: flex; gap: 5px; }
+
+/* Modal (scoped, pretty) — included to mirror SalaryCal for consistency */
+.advance .salary-modal {
+  display: none;                   /* hidden by default */
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(10,12,18,0.45);
+  backdrop-filter: blur(6px);
+  align-items: center;
+  justify-content: center;
+}
+.advance .salary-modal.open {
+  display: flex;
+  animation: sal-fade-in .18s ease-out;
+}
+.advance .salary-modal-content {
+  width: min(720px, 92vw);
+  background: linear-gradient(180deg, #ffffff 0%, #fafbff 100%);
+  border: 1px solid rgba(102,126,234,.18);
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(18,23,38,.25);
+  padding: 22px 22px 18px;
+  transform-origin: top center;
+  animation: sal-pop .18s ease-out;
+}
+.advance .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.advance .modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+.advance .salary-modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 20px;
+  cursor: pointer;
+  border: 1px solid #e5e7eb;
+  transition: transform .15s ease, background .2s ease, color .2s ease;
+}
+.advance .salary-modal-close:hover {
+  background: #eef2ff;
+  color: #374151;
+  transform: translateY(-1px);
+}
+.advance .modal-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 18px;
+}
+@media (max-width: 640px) {
+  .advance .modal-body { grid-template-columns: 1fr; }
+}
+.advance .modal-body .form-group { display: flex; flex-direction: column; }
+.advance .modal-body label { font-weight: 600; margin-bottom: 6px; color: #374151; }
+.advance .modal-body input {
+  padding: 11px 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: border-color .15s ease, box-shadow .15s ease, transform .05s ease;
+}
+.advance .modal-body input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102,126,234,.12);
+}
+.advance .modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+.advance .btn { margin-left: 0; }             /* inside modal, remove big left margin */
+.advance .btn-success { background: linear-gradient(45deg,#11998e,#38ef7d); }
+.advance .btn-warning { background: linear-gradient(45deg,#f59e0b,#fbbf24); }
+
+/* Animations */
+@keyframes sal-fade-in { from { opacity: 0 } to { opacity: 1 } }
+@keyframes sal-pop {
+  from { opacity: 0; transform: translateY(-6px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}

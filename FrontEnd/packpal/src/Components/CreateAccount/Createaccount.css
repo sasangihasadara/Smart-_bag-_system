@@ -1,0 +1,290 @@
+/* === Match Login.css typography vibe === */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,700&display=swap');
+
+/* -------- Page namespace (prevents style leakage) -------- */
+.acc {
+  --bg: #ffffff;         /* align with login's white bg */
+  --card: #ffffff;
+  --ink: #0f172a;
+  --muted:#6b7280;
+  --border:#e6e8f3;
+
+  /* Left gradient (match login brand-side) */
+  --grad-1:#778ab7;
+  --grad-2:#dfcb48;
+
+  /* Button gradient (match login primary) */
+  --btn-1:#dad852;  /* gold start */
+  --btn-2:#cfbe3f;  /* gold end */
+  --btn-hover-1:#5a7ae8; /* blue hover start */
+  --btn-hover-2:#6b44a0; /* purple hover end */
+
+  --radius-xl: 24px;
+  --shadow-card: 0 20px 60px rgba(0,0,0,.15);
+  --ring: rgba(102,126,234,.15);
+}
+
+.acc * { box-sizing: border-box; }
+
+/* -------- Page Wrap (scoped) -------- */
+.acc .page-wrap{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+}
+
+.acc .account-page{}
+
+.acc .page-wrap, .acc .auth-page, .acc .auth-card, .acc .auth-right {
+  color: var(--ink);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Centered card zone */
+.acc .auth-page{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 32px;
+}
+
+.acc .auth-card{
+  width:min(1200px, 96vw);
+  min-height:560px;
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  display:grid;
+  grid-template-columns: 1.15fr 1fr;
+  overflow:hidden;
+  position: relative;
+  animation: accCardAppear 1s ease-out;
+}
+@keyframes accCardAppear{
+  0%{ transform:scale(.98) translateY(12px); opacity:0; }
+  100%{ transform:scale(1) translateY(0); opacity:1; }
+}
+@media (max-width: 980px){
+  .acc .auth-card{ grid-template-columns:1fr; }
+}
+
+/* ===== Left brand ===== */
+.acc .auth-left{
+  background: linear-gradient(135deg, var(--grad-1) 30%, var(--grad-2) 100%);
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:60px 40px;
+  color:#fff;
+  overflow:hidden;
+}
+
+.acc .brand-col{
+  width:100%;
+  height:100%;
+  display:grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.acc .brand-center{
+  align-self:center;
+  justify-self:center;
+  text-align:center;
+  color:#e8edff;
+  max-width: 560px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Optional badge behind logo */
+.acc .logo-dot{
+  height:80px; width:80px; border-radius:20px;
+  background: rgba(255,255,255,.2);
+  border:1px solid rgba(255,255,255,.25);
+  display:grid; place-items:center;
+  font-size:28px; color:#fff; margin: 0 auto 22px;
+  animation: accIconPulse 3s ease-in-out infinite;
+}
+@keyframes accIconPulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+
+/* ✅ Brand logo (match Login page sizing) */
+.acc .brand-content .brand-logo,
+.acc .brand-center .brand-logo {
+  width: 350px;
+  height: 350px;
+  object-fit: contain;
+  display: block;
+  margin: 0 0 12px 10px;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.15));
+}
+
+.acc .brand-name{
+  font-size:3.6rem;
+  font-weight:800;
+  margin: 0 0 12px;
+  margin-top: -80px;
+  letter-spacing:-1px;
+  text-shadow:0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+/* ✨ “Wow” italic line */
+.acc .brand-copy{
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.3rem;
+  line-height: 1.6;
+  letter-spacing: 0.2px;
+  color: #ffffff;
+  text-shadow: 0 3px 14px rgba(0,0,0,.35);
+  opacity: .98;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ===== Right form ===== */
+.acc .auth-right{
+  background: var(--card);
+  display:flex; align-items:center; justify-content:center;
+  padding: 60px 60px;
+}
+
+.acc .form-wrap{ width: min(560px, 100%); }
+
+.acc .title{
+  font-size: clamp(2.6rem, 4vw, 3.4rem);
+  margin: 0 0 8px;
+  color: #2c3e50;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  font-weight:900;
+  text-align:center;
+}
+.acc .subtitle{
+  margin: 10px auto 26px;
+  color: #7f8c8d;
+  text-align:center;
+  font-size:1.05rem;
+}
+
+.acc .form{ display:grid; gap: 16px; }
+.acc .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media (max-width:560px){ .acc .grid-2{ grid-template-columns:1fr } }
+
+.acc .field{ display:flex; flex-direction:column; gap:8px; }
+
+.acc .label{
+  display:block; margin-bottom:2px; color:#667eea; font-weight:600; font-size:.9rem;
+  text-transform:uppercase; letter-spacing:.5px;
+}
+
+.acc .input-shell{ position:relative; }
+.acc .input-shell input{
+  width:100%; height:52px; border-radius:12px;
+  border:2px solid #e8ecef; background:#f8f9fa;
+  padding: 0 48px 0 16px; font-size:1rem; outline:none;
+  transition:.3s; color:#2c3e50;
+}
+.acc .input-shell input::placeholder{ color:#bdc3c7; }
+.acc .input-shell input:focus{
+  border-color:#667eea; background:#fff;
+  box-shadow:0 0 0 3px rgba(102,126,234,.1);
+  transform: translateY(-1px);
+}
+
+.acc .right-icon{
+  position:absolute; right:14px; top:50%; transform: translateY(-50%);
+  font-size:16px; opacity:.55; pointer-events:none;
+}
+
+/* eye button */
+.acc .eye-btn{
+  position:absolute; right:8px; top:50%; transform: translateY(-50%);
+  height:36px; width:40px; border-radius:10px;
+  border:1px solid var(--border); background:#fff; cursor:pointer;
+  display:grid; place-items:center;
+}
+.acc .eye-btn:focus{ outline:3px solid var(--ring) }
+
+/* helper lines */
+.acc .hint{ color:#64748b; font-size:12px }
+.acc .error{ color:#ef4444; min-height:1.1em; font-size:12px }
+
+/* checkbox line */
+.acc .checkline{
+  display:flex; align-items:center; gap:10px; margin-top:4px;
+  font-size:14px; color:#374151;
+}
+.acc .checkline input{ width:18px; height:18px }
+.acc .link{ color:#667eea; text-decoration:none }
+.acc .link:hover{ text-decoration:underline }
+
+/* buttons */
+.acc .btn-row{ display:flex; gap:12px; align-items:center; justify-content:center; margin-top:6px }
+.acc .primary-btn{
+  height:52px; padding: 0 22px; border:none; border-radius:12px; cursor:pointer;
+  background: linear-gradient(135deg, var(--btn-1), var(--btn-2));
+  color:#fff; font-size:1.05rem; font-weight:800; letter-spacing:.04em;
+  box-shadow: 0 12px 26px rgba(102,126,234,.25);
+  position:relative; overflow:hidden; transition:.3s;
+  text-transform:uppercase;
+}
+.acc .primary-btn::before{
+  content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent); transition:left .6s;
+}
+.acc .primary-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 30px rgba(102,126,234,.4);
+  background: linear-gradient(135deg, var(--btn-hover-1), var(--btn-hover-2));
+}
+.acc .primary-btn:hover::before{ left:100%; }
+.acc .primary-btn:disabled{ opacity:.6; cursor:not-allowed; filter: grayscale(.1) }
+
+.acc .ghost-btn{
+  height:52px; padding: 0 18px; border-radius:12px; cursor:pointer;
+  background:#ecf0f1; color:#2c3e50; border:none;
+  transition: background .2s ease, color .2s ease, transform .06s;
+}
+.acc .ghost-btn:hover{ background:#dfe6e9 }
+.acc .ghost-btn:active{ transform: translateY(1px) }
+
+.acc .status{ min-height:1.2em; text-align:center; }
+.acc .status.good{ color:#16a34a }
+.acc .status.bad{ color:#ef4444 }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .acc .primary-btn, .acc .ghost-btn { transition: none; }
+}
+
+/* Make button look like your link style */
+.link-button{
+  background:none;
+  border:0;
+  padding:0;
+  font:inherit;
+  cursor:pointer;
+  text-decoration:underline;
+}
+.link-button:focus{ outline:3px solid var(--ring); outline-offset:2px; }
+
+/* Responsive tweaks */
+@media (min-width:1100px){
+  .acc .auth-left{ padding:60px 140px; }
+}
+@media (max-width:768px){
+  .acc .auth-card{ max-width:420px; min-height:auto; }
+  .acc .auth-left{ padding:40px 30px; min-height:250px; }
+  .acc .brand-name{ font-size:2.5rem; }
+  .acc .brand-copy{ font-size:1rem; }
+  .acc .auth-right{ padding:40px 30px; }
+}
+@media (max-width:480px){
+  .acc .auth-left{ padding:30px 20px; }
+  .acc .auth-right{ padding:30px 20px; }
+  .acc .brand-name{ font-size:2.2rem; }
+}

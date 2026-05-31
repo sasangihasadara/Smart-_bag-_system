@@ -1,0 +1,101 @@
+/* Sidebar.css */
+/* Keep this var in one place so layouts stay in sync */
+:root { --sidebar-w: 280px; }
+
+/* ===== Scoped to the sidebar only ===== */
+.sidebarsanu .sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(15px);
+  box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+  border-radius: 0 80px 0 0;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+}
+
+/* Header */
+.sidebarsanu .sidebar-header {
+  padding: 50px 25px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  text-align: center;
+  background: linear-gradient(135deg,#354fc5,#15122f);
+  color: #fff;
+}
+.sidebarsanu .sidebar-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  margin-right: 20px;
+}
+.sidebarsanu .sidebar-header p { font-size: 0.9rem; opacity: 0.9; }
+
+/* Nav */
+.sidebarsanu .sidebar-nav { padding: 20px 0; }
+
+.sidebarsanu .nav-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 25px;
+  color: #0e141c;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+  font-weight: 500;
+}
+.sidebarsanu .nav-item i { width: 24px; margin-right: 15px; font-size: 1.1rem; }
+
+.sidebarsanu .nav-item:hover {
+  background: rgba(102,126,234,0.1);
+  border-left-color: #667eea;
+  color: #667eea;
+  transform: translateX(5px);
+}
+.sidebarsanu .nav-item.active {
+  background: rgba(102,126,234,0.15);
+  border-left-color: #667eea;
+  color: #667eea;
+}
+
+.sidebarsanu .nav-divider {
+  height: 1px;
+  background: rgba(0,0,0,0.1);
+  margin: 15px 25px;
+}
+
+/* Logout */
+.sidebarsanu .logout-section {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  padding: 0 25px;
+}
+.sidebarsanu .logout-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.sidebarsanu .logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(239,68,68,0.4);
+}
+.sidebarsanu .logout-btn i { margin-right: 10px; }
+
+/* Mobile toggle (optional) */
+@media (max-width: 768px) {
+  .sidebarsanu .sidebar { transform: translateX(-100%); }
+  .sidebarsanu .sidebar.active { transform: translateX(0); }
+}

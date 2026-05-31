@@ -1,0 +1,291 @@
+/* src/Components/HiruInventory/HiruInventory.css */
+
+/* Scope everything to this page wrapper */
+.hiru{
+  --sidebar-width: 280px;
+}
+
+/* ===== Sidebar spacing & backdrop ===== */
+.hiru .inventory-page {
+  padding-left: var(--sidebar-width);
+  min-height: 100vh;
+  background: linear-gradient(180deg,#eef2f7 0%, #e9edf4 60%, #e6ecf6 100%);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* ===== Container ===== */
+.hiru .container {
+  width: min(calc(100vw - var(--sidebar-width) - 48px), 1280px);
+  margin: 24px 16px;
+  background: #fff;
+  border-radius: 24px;
+  padding: 26px;
+  box-shadow: 0 28px 70px rgba(16,24,40,.1);
+}
+
+/* ===== Title row ===== */
+.hiru .title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.hiru h1 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 800;
+  color: #6f6be9;
+  letter-spacing: .4px;
+}
+.hiru h1 .emoji { font-size: .9em; }
+
+.hiru .title-actions { display: flex; gap: 10px; }
+
+.hiru .ghost-btn {
+  border: 1.5px solid #e6e9f2;
+  background: #fff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  color: #4a4f67;
+  cursor: pointer;
+  transition: .15s ease;
+}
+.hiru .ghost-btn[aria-pressed="true"] {
+  border-color: #7b6df4;
+  color: #7b6df4;
+  box-shadow: 0 0 0 3px rgba(123,109,244,.15) inset;
+}
+.hiru .ghost-btn:hover { transform: translateY(-1px); }
+
+.hiru .export-btn {
+  background: linear-gradient(135deg,#6b7cf7,#7b49e3);
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 16px 30px rgba(123,73,227,.25);
+}
+
+/* ===== KPI strip ===== */
+.hiru .kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 8px 0 18px;
+}
+.hiru .kpi {
+  background: #ffffff;
+  border: 1px solid #eef1f6;
+  border-radius: 16px;
+  padding: 12px 14px;
+  box-shadow: 0 12px 26px rgba(0,0,0,.05);
+}
+.hiru .kpi-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.hiru .kpi-label { color: #6a7287; font-weight: 700; }
+.hiru .kpi-number { color: #2e3448; font-weight: 900; font-size: 22px; }
+.hiru .kpi-number.warn { color: #e24d4d; }
+.hiru .kpi-bar, .hiru .kpi-bar.warn {
+  height: 8px;
+  background: #f2f4fa;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.hiru .kpi-bar span { display:block; height:100%; background:#7b6df4; }
+.hiru .kpi-bar.warn span { background:#ff7676; }
+
+/* ===== Controls ===== */
+.hiru .controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.hiru .search {
+  flex: 1;
+  border: 2px solid #e6ebf5;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 16px;
+  color: #2b3245;
+}
+.hiru .sort {
+  width: 250px;
+  border: 2px solid #e6ebf5;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 16px;
+  color: #2b3245;
+}
+
+/* ===== Two-column layout ===== */
+.hiru .inventory-layout {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr; /* table wider */
+  gap: 22px;
+  align-items: start;
+}
+.hiru .left-pane, .hiru .right-pane { min-width: 0; }
+
+/* ===== Table card ===== */
+.hiru .table-card {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.06);
+  border: 1px solid #eef2f7;
+  overflow: hidden;
+}
+
+.hiru .inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+.hiru .inventory-table thead th {
+  background: linear-gradient(90deg, #6e7deb, #6b4fbb);
+  color: #fff;
+  padding: 16px;
+  text-align: left;
+  font-weight: 800;
+  letter-spacing: .5px;
+}
+.hiru .inventory-table tbody tr:nth-child(odd) { background: #f6f7ff; }
+.hiru .inventory-table tbody tr:nth-child(even) { background: #fff; }
+
+.hiru .inventory-table td {
+  padding: 16px;
+  border-bottom: 1px solid #eef1f6;
+  color: #2e3448;
+  font-weight: 600;
+}
+.hiru .item-id { color: #667eea; font-weight: 900; }
+.hiru .item-name { font-weight: 800; display:flex; align-items:center; gap:8px; }
+.hiru .chip {
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  background: #eef1ff;
+  color: #5a63c5;
+}
+.hiru .chip-warn { background: #ffecee; color: #d24343; }
+
+/* empty state */
+.hiru .empty {
+  text-align: center;
+  padding: 22px;
+  color: #667089;
+  font-weight: 700;
+}
+
+/* ===== Cards view ===== */
+.hiru .cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.hiru .inv-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid #eef2f7;
+  box-shadow: 0 18px 40px rgba(0,0,0,.06);
+}
+.hiru .inv-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.hiru .badge {
+  background: #eef1ff;
+  color: #5a63c5;
+  font-weight: 900;
+  border-radius: 10px;
+  padding: 6px 10px;
+  letter-spacing: .3px;
+}
+.hiru .inv-name {
+  margin: 6px 0 8px;
+  font-size: 18px;
+  font-weight: 900;
+  color: #2e3448;
+}
+.hiru .inv-qty {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: #525b75;
+  font-weight: 700;
+}
+.hiru .qty-label { color: #7a8299; }
+
+.hiru .meter {
+  margin-top: 10px;
+  background: #f2f4fa;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.hiru .meter span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg,#7b6df4,#8e57ff);
+}
+
+/* ===== Form card ===== */
+.hiru .form-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 22px 50px rgba(0,0,0,0.06);
+  border: 1px solid #eef2f7;
+}
+.hiru .form-title {
+  text-align: left;
+  margin-bottom: 14px;
+  font-size: 20px;
+  font-weight: 800;
+  color: #3a3f50;
+}
+.hiru .form-group { margin-bottom: 16px; }
+.hiru .form-group label {
+  display: block;
+  font-weight: 900;
+  color: #5b6275;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+.hiru .required { color: #e24d4d; }
+.hiru .form-card input[type="text"],
+.hiru .form-card input[type="number"] {
+  width: 100%;
+  border: 2px solid #e6ebf5;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 16px;
+  color: #2b3245;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.hiru .form-card input:focus {
+  outline: none;
+  border-color: #6b88ff;
+  box-shadow: 0 0 0 3px rgba(107,136,255,0.25);
+}
+.hiru .form-actions { text-align: center; margin-top: 18px; }
+.hiru .submit-btn {
+  background: linear-gradient(135deg, #6c7ef5, #7649d9);
+  color: #fff;
+}

@@ -1,0 +1,223 @@
+/* ==========================================
+   Sewing Instructions — fully scoped + wrapper
+   ========================================== */
+.sew{
+  --sidebar-w: 280px;
+  --bg:#f6f7fb; --card:#fff; --text:#0f172a; --muted:#6b7280; --border:#e5e7eb;
+  --brand:#2563eb; --brand-600:#1d4ed8; --success:#22c55e; --danger:#ef4444; --warning:#f59e0b; --info:#3b82f6;
+  font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  color: var(--text);
+  background: var(--bg);
+  min-height: 100vh;
+}
+.sew *{ box-sizing: border-box }
+
+/* Content area sits to the right of sidebar */
+.sew .page{
+  margin-left: var(--sidebar-w);
+  width: calc(100vw - var(--sidebar-w));
+  min-height: 100vh;
+}
+
+/* Topbar */
+.sew .topbar{
+  position: sticky; top: 0; z-index: 10;
+  background: #fff; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px;
+}
+.sew .page-title{ margin: 0; font-size: 22px }
+.sew .topbar-actions{ display: flex; gap: 10px; align-items: center }
+.sew .avatar{ border: none; background: #eef2ff; border-radius: 999px; padding: 8px 10px; cursor: pointer }
+
+/* Layout */
+.sew .container{ max-width: 1200px; margin: 0 auto; padding: 20px }
+.sew .section-head{ display: flex; justify-content: space-between; align-items: center; margin: 14px 0 10px }
+.sew h2{ margin: 0 0 4px }
+
+/* Buttons */
+.sew .btn{
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--border);
+  background: #fff; padding: 10px 14px; border-radius: 10px;
+  font-weight: 600; cursor: pointer;
+}
+.sew .btn:hover{ border-color: #cbd5e1 }
+.sew .btn-primary{ background: var(--brand); border-color: var(--brand); color: #fff }
+.sew .btn-primary:hover{ background: var(--brand-600) }
+.sew .icon{ font-size: 16px }
+
+/* Card + table */
+.sew .card{ background: var(--card); border: 1px solid var(--border); border-radius: 12px }
+.sew .table-wrap{ overflow: auto }
+.sew .table{ width: 100%; border-collapse: separate; border-spacing: 0 }
+.sew .table th, .sew .table td{
+  padding: 14px 12px; border-bottom: 1px solid var(--border);
+  text-align: left; vertical-align: top;
+}
+.sew .table th{ color: var(--muted); font-size: 12px; letter-spacing: .02em; background: #fafafa }
+.sew .table tr:last-child td{ border-bottom: none }
+
+.sew .bag-title{ font-weight: 700; margin: 0 0 4px }
+.sew .bag-sub{ margin: 0; color: var(--muted); font-size: 12px }
+.sew .nowrap{ white-space: nowrap }
+
+/* Badges */
+.sew .badge{
+  display: inline-block; padding: 6px 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 700;
+}
+.sew .badge.high{ background: #fee2e2; color: #991b1b }
+.sew .badge.medium{ background: #fef3c7; color: #92400e }
+.sew .badge.low{ background: #dcfce7; color: #166534 }
+.sew .badge.info{ background: #dbeafe; color: #1e40af }
+.sew .badge.pending{ background: #e5e7eb; color: #374151 }
+.sew .badge.qc{ background: #fef9c3; color: #854d0e }
+
+/* Row actions */
+.sew .actions{ display: flex; gap: 12px }
+.sew .icon-btn{ border: none; background: transparent; cursor: pointer; font-size: 0; line-height: 0 }
+.sew .icon-btn svg{ width: 20px; height: 20px; stroke-width: 2; stroke: currentColor; fill: none }
+.sew .icon-view{ color: #1d4ed8 }
+.sew .icon-edit{ color: #16a34a }
+.sew .icon-del{ color: #ef4444 }
+
+/* =========================
+   Modal dialogs — center perfectly
+   ========================= */
+.sew .modal{
+  border: none;
+  padding: 0;
+  margin: 0;                /* kill UA margins */
+  background: transparent;
+  z-index: 1000;
+}
+
+/* Full-viewport overlay */
+.sew .modal[open]{
+  position: fixed;
+  inset: 0;
+  /* no flex/grid needed; we center the card itself */
+  padding: 0;
+  height: 100dvh;
+}
+
+/* Dim background */
+.sew .modal::backdrop{ background: rgba(0,0,0,.35) }
+
+/* Center the card itself with transform */
+.sew .modal-card{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  width: min(980px, 100% - 48px); /* 24px gutter on both sides */
+  max-height: calc(100dvh - 48px);
+  overflow: auto;
+  margin: 0;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+
+/* Search bar */
+/* Search bar */
+.searchbar{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto; /* sits on the right of the section head */
+}
+.search-input{
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 36px 10px 34px; /* room for icon + clear */
+  min-width: 300px;
+  outline: none;
+}
+.search-input:focus{ border-color: #cbd5e1 }
+.search-icon{
+  margin-left: 8px;
+  position: relative;
+  left: 340px; /* visually inside the input */
+  pointer-events: none;
+}
+.search-clear{
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  margin-left: -40px; /* overlay on right edge of input */
+  padding: 6px;
+}
+@media (max-width: 640px){
+  .searchbar{ width: 100%; flex-wrap: wrap; gap: 8px }
+  .search-input{ flex: 1 1 100%; min-width: 0; width: 100% }
+  .search-icon{ left: 28px }
+  .search-clear{ margin-left: -36px }
+}
+
+/* =========================
+   Modal dialogs — centered
+   ========================= */
+.sew .modal{
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  z-index: 1000;
+}
+
+.sew .modal[open]{
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  height: 100dvh;
+  padding: 24px;
+}
+
+.sew .modal::backdrop{ background: rgba(0,0,0,.35) }
+
+.sew .modal-card{
+  position: static;
+  transform: none;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  width: min(720px, 100%);
+  max-height: calc(100dvh - 48px);
+  overflow: auto;
+  margin: 0;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+
+
+.sew .grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-top: 6px;
+}
+.sew .grid .span-2{ grid-column: span 2 }
+.sew label{ display: flex; flex-direction: column; gap: 6px; font-size: 14px }
+.sew input, .sew select, .sew textarea{
+  border: 1px solid var(--border); border-radius: 8px; padding: 10px; outline: none;
+}
+.sew input:focus, .sew select:focus, .sew textarea:focus{ border-color: #cbd5e1 }
+.sew .modal-actions{ display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px }
+.sew .view-body{ font-size: 14px; color: #111 }
+.sew .view-body p{ margin: 6px 0 }
+
+/* Prevent background scroll while modal is open */
+body:has(.sew .modal[open]){ overflow: hidden; }
+
+/* Responsive */
+@media (max-width:1024px){
+  .sew{ --sidebar-w: 0px; }
+  .sew .page{ margin-left: 0; width: 100vw; }
+  .sew .grid{ grid-template-columns: 1fr; }
+}

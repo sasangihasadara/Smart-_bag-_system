@@ -1,0 +1,163 @@
+/* ===== PackPal Header (scoped) ===== */
+.ppx-header{
+  --primary:#D4AF37;
+  --secondary:#B88A00;
+  --ink:#0B1026;
+}
+
+/* Top-level header container */
+.ppx-header .header{
+  position:absolute; top:0; left:0; width:100%;
+  z-index:10;
+  background:transparent; border:none; box-shadow:none; color:#fff;
+}
+.ppx-header .header-content{ max-width:1500px; margin:0 auto; padding:0 24px; }
+
+/* ONE ROW: logo | nav | actions */
+.ppx-header .header-top{
+  display:flex; align-items:center; gap:24px; padding:14px 0;
+}
+
+/* ===== BRAND ===== */
+.ppx-header .logo{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+  color:#fff;
+
+  background:transparent !important;
+  padding:0 !important;
+  margin:0 !important;
+  border:none !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+
+/* Bigger logo image */
+.ppx-header .logo-img{
+  height:120px;
+  width: 120px;
+  margin-left:-80px;
+  display: block;
+  object-fit: contain;
+  border-radius: 0;
+  animation: ppxLogoFloat 3s ease-in-out infinite;
+}
+
+/* Gentle float */
+@keyframes ppxLogoFloat{
+  0%,100%{transform:translateY(0) rotate(0)}
+  50%{transform:translateY(-2px) rotate(2deg)}
+}
+
+/* Brand text stays inline */
+.ppx-header .logo-text{
+  font-size:1.8rem;
+  font-weight:900;
+  line-height:1;
+  white-space: nowrap;
+  background:linear-gradient(45deg,#fff,#f7f7ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-top:0;
+}
+
+/* User chip */
+.user-chip{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 12px; border-radius:16px;
+  background:rgba(255,255,255,.10); color:#fff; font-weight:600;
+}
+.user-dot{
+  width:8px; height:8px; border-radius:50%;
+  background:#10b981; display:inline-block;
+}
+
+/* ===== NAV (center) ===== */
+.ppx-header .nav{
+  flex: 1 1 auto;
+  display:flex; justify-content:center;
+  border:0; background:transparent;
+}
+.ppx-header .nav-list{
+  display:flex; align-items:center; gap:18px; list-style:none; padding:0; margin:0;
+  white-space:nowrap;
+}
+.ppx-header .nav-link{
+  color:#ffffff; text-decoration:none; display:flex; align-items:center; gap:8px;
+  padding:12px 16px; font-weight:700; position:relative; line-height:1;
+}
+.ppx-header .nav-link:hover{ color:#fff7d6; }
+.ppx-header .nav-link::after{
+  content:''; position:absolute; left:50%; bottom:0; width:0; height:3px; border-radius:2px;
+  background:linear-gradient(90deg,var(--primary),var(--secondary)); transform:translateX(-50%); transition:width .25s;
+}
+.ppx-header .nav-link:hover::after{ width:70%; }
+
+/* Dropdown */
+.ppx-header .nav-item{ position:relative; }
+.ppx-header .dropdown{
+  position:absolute; top:100%; left:50%; transform:translateX(-50%) translateY(8px);
+  min-width:280px; background:#ffffff; border:1px solid rgba(0,0,0,.08);
+  border-radius:12px; padding:10px; box-shadow:0 18px 50px rgba(2,6,23,.12);
+  opacity:0; visibility:hidden; transition:opacity .18s ease, transform .18s ease; z-index:20;
+}
+.ppx-header .nav-item:hover .dropdown,
+.ppx-header .nav-item:focus-within .dropdown{
+  opacity:1; visibility:visible; transform:translateX(-50%) translateY(12px);
+}
+.ppx-header .dropdown-item{
+  display:block; padding:10px 12px; border-radius:10px; border-left:3px solid transparent;
+  text-decoration:none; color:var(--ink); transition:background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.ppx-header .dropdown-item + .dropdown-item{ margin-top:4px; }
+.ppx-header .dropdown-item:hover{ background:#f8fafc; border-left-color:var(--primary); transform:translateX(2px); }
+.ppx-header .dropdown-item.active{ background:#fff7e6; border-left-color:var(--secondary); font-weight:700; }
+.ppx-header .dropdown-title{ font-weight:800; color:var(--ink); }
+.ppx-header .dropdown-desc{ color:#475569; font-size:.9rem; }
+
+/* ===== ACTIONS (right) ===== */
+.ppx-header .header-actions{
+  display:flex; align-items:center; gap:12px; white-space:nowrap;
+}
+
+/* Base button */
+.ppx-header .btn{
+  padding:10px 16px; border-radius:20px; border:1px solid rgba(255,255,255,.35);
+  background:rgba(255,255,255,.1); color:#fff; text-decoration:none; font-weight:600;
+  display:inline-flex; gap:8px; align-items:center; backdrop-filter: blur(6px); cursor:pointer;
+}
+.ppx-header .btn:hover{ box-shadow:0 6px 18px rgba(2,6,23,.18); transform:translateY(-1px); }
+
+/* Red Logout button */
+.ppx-header .btn-logout{
+  border:none;
+  background: linear-gradient(45deg, #ef4444, #dc2626);
+  color:#fff;
+  font-weight:800;
+}
+.ppx-header .btn-logout:hover{
+  filter: brightness(1.03) saturate(1.05);
+  box-shadow: 0 10px 24px rgba(220, 38, 38, .35);
+}
+
+/* Cart */
+.ppx-header .cart-btn{
+  width:44px; height:44px; border-radius:50%;
+  border:1px solid rgba(255,255,255,.35);
+  display:flex; align-items:center; justify-content:center; color:#fff;
+  background:rgba(255,255,255,.1); cursor:pointer; backdrop-filter: blur(6px);
+  position:relative;
+}
+.ppx-header .cart-btn:hover{ background:linear-gradient(45deg,var(--primary),var(--secondary)); color:var(--ink); }
+.ppx-header .cart-badge{
+  position:absolute; top:-6px; right:-6px; width:22px; height:22px; border-radius:50%;
+  background:linear-gradient(45deg,#ef4444,#f97316); color:#fff; display:flex; align-items:center; justify-content:center;
+  font-size:.75rem; font-weight:800;
+}
+
+/* Small screens: hide nav row */
+@media (max-width: 1100px){
+  .ppx-header .nav{ display:none; }
+}

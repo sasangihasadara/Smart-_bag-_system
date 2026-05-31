@@ -1,0 +1,129 @@
+/* =========================
+   Purchase Items (scoped)
+   Namespace: .po
+   ========================= */
+
+/* Page backdrop + spacing */
+.po{
+  display:flex;
+  min-height:100vh;
+  background:
+    radial-gradient(1100px 520px at 8% -8%, #F2F6FF, transparent 55%),
+    linear-gradient(180deg, #F7FAFF, #F2F6FF);
+}
+.po .main-content{
+  flex:1 1 auto;
+  min-width:0;
+  padding:28px 24px 40px;
+  margin-left: 270px;
+}
+
+/* Card container */
+.po .container{
+  max-width:1200px;
+  margin:0 auto;
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,.10);
+  backdrop-filter:blur(10px);
+  padding:28px;
+}
+
+/* Header */
+.po .header{
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid #eef2ff;
+}
+.po .header h1{font-size:28px;color:#1f2937}
+.po .date{color:#6b7280;font-size:14px}
+
+/* Metrics */
+.po .metrics-row{
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0,1fr)); /* consistent 4-up on desktop */
+  gap:18px; margin-bottom:24px;
+}
+@media (max-width:1200px){ .po .metrics-row{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media (max-width:900px){  .po .metrics-row{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:540px){  .po .metrics-row{ grid-template-columns:1fr; } }
+
+.po .metric-card{
+  background:linear-gradient(135deg,#667eea,#15122f);
+  color:#fff; border-radius:15px; padding:22px;
+  position:relative; overflow:hidden; transition:.2s;
+  box-shadow:0 18px 28px rgba(92,64,187,.30);
+}
+.po .metric-card::before{content:"";position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,.12);border-radius:50%}
+.po .metric-card:hover{transform:translateY(-3px)}
+.po .metric-value{font-size:32px;font-weight:900;margin-bottom:6px}
+.po .metric-label{text-transform:uppercase;letter-spacing:1px;font-size:12px;opacity:.95}
+
+/* Actions */
+.po .action-bar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.po .btn{
+  border:none;border-radius:12px;padding:12px 18px;font-weight:700;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;transition:.2s;font-size:14px;
+  box-shadow:0 8px 22px rgba(17,24,39,.12); position:relative;
+}
+.po .btn-pr{background:linear-gradient(135deg,#6a5af9,#15122f);color:#fff}
+.po .btn-secondary{background:#f8f9fa;color:#495057;border:2px solid #e9ecef}
+.po .btn-secondary:hover{background:#e9ecef; transform:translateY(-2px)}
+.po .btn-success{background:linear-gradient(135deg,#10b981,#059669); color:#fff}
+.po .btn-success:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(16,185,129,.3)}
+
+/* Table */
+.po .table-container{background:#fff;border-radius:15px;padding:22px;box-shadow:0 10px 20px rgba(0,0,0,.05)}
+.po .table-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px;flex-wrap:wrap}
+.po .table-title{font-size:20px;font-weight:800;color:#1f2937}
+.po .search-filter-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.po .search-box,.po .filter-select{padding:10px 14px;border:2px solid #e5e7eb;border-radius:25px;font-size:14px;transition:border-color .2s}
+.po .search-box{width:220px}
+.po .search-box:focus,.po .filter-select:focus{outline:none;border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,.12)}
+.po table{width:100%;border-collapse:collapse}
+.po th, .po td{padding:14px;border-bottom:1px solid #f0f0f0;text-align:left}
+.po th{background:#f8f9fa;color:#1f2937;text-transform:uppercase;letter-spacing:1px;font-size:12px}
+
+/* Action cell */
+.po #purchaseTable td.actions{ display:flex; gap:10px; align-items:center; }
+
+/* Pill buttons (variants) */
+.po .btn-view{ background: linear-gradient(135deg,#93c5fd,#3b82f6); color:#fff; }
+.po .btn-ed{ background:#3b82f6; color:#fff; }
+.po .btn-sec{ background: linear-gradient(135deg,#6a5af9,#231b5a); color:#fff; }
+.po .btn-suc{ background: linear-gradient(135deg,#34d399,#059669); color:#fff; }
+.po .btn-danger{ background:#e74c3c; color:#fff; }
+
+.po .btn:hover{ transform:translateY(-1px); filter:brightness(1.02); }
+.po .btn:active{ transform:translateY(0); filter:brightness(.98); }
+
+/* Status pills */
+.po .status{display:inline-block;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+.po .status.pending{background:#fff3cd;color:#856404}
+.po .status.approved{background:#d4edda;color:#155724}
+.po .status.delivered{background:#cce7ff;color:#064e8a}
+.po .status.cancelled{background:#f8d7da;color:#721c24}
+
+/* Modal */
+.po .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.po .modal.show{display:flex}
+.po .modal-content{background:#fff;border-radius:20px;padding:26px;max-width:560px;width:90%;max-height:80vh;overflow:auto;box-shadow:0 20px 40px rgba(0,0,0,.2)}
+.po .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid #eef2ff}
+.po .modal-title{font-size:22px;font-weight:800;color:#1f2937}
+.po .close-modal{background:none;border:none;font-size:24px;cursor:pointer;color:#6b7280}
+.po .form-group{margin-bottom:14px}
+.po .form-label{display:block;margin-bottom:6px;font-weight:700;color:#1f2937}
+.po .form-control{width:100%;padding:12px 14px;border:2px solid #e5e7eb;border-radius:10px;font-size:14px;transition:border-color .2s}
+.po .form-control:focus{outline:none;border-color:#6366f1}
+.po .form-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:16px}
+
+/* Toast */
+.po .toast{position:fixed;right:20px;bottom:20px;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;box-shadow:0 10px 20px rgba(0,0,0,.2);opacity:0;transform:translateY(10px);transition:.25s;z-index:1200}
+.po .toast.show{opacity:1;transform:translateY(0)}
+
+/* Responsive tweaks */
+@media (max-width:768px){
+  .po .table-header{flex-direction:column;align-items:stretch}
+  .po .search-filter-bar{justify-content:center}
+  .po .search-box{width:180px}
+  .po .metrics-row{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+}

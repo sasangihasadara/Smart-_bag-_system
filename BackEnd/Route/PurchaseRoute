@@ -1,0 +1,21 @@
+// BackEnd/Route/PurchaseRoute.js
+const express = require("express");
+const {
+  listPurchases,
+  getByBusinessId,
+  createPurchase,
+  updateByBusinessId,
+  removeByBusinessId,
+  updateStatus,
+} = require("../Controllers/PurchaseController");
+
+const router = express.Router();
+
+router.get("/", listPurchases);
+router.get("/:id", getByBusinessId);
+router.post("/", createPurchase);
+router.put("/:id", updateByBusinessId);
+router.delete("/:id", removeByBusinessId);
+router.patch("/:id/status", updateStatus);
+
+module.exports = router;

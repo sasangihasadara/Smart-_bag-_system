@@ -1,0 +1,200 @@
+/* ===========================
+   SalaryManagement Page Styles (scoped to .salarymgmt)
+   =========================== */
+
+/* Layout wrapper (sidebar offset) */
+.salarymgmt {
+  padding-left: 280px;
+  background: #f6f7fb;
+  min-height: 100vh;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+@media (max-width: 1024px) {
+  .salarymgmt { padding-left: 0; }
+}
+
+/* Container */
+.salarymgmt .container {
+  max-width: 2000px;  /* wider container */
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* Header */
+.salarymgmt .container h1 {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #000;
+}
+.salarymgmt .container p {
+  text-align: center;
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin: 0 0 16px 0;
+  color: #4b5563;
+}
+
+/* Tabs inside section */
+.salarymgmt .section .nav {
+  margin: 15px 0 20px;
+  padding: 10px;
+  background: #ffffff;
+  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,.05);
+}
+.salarymgmt .section .tab-btn {
+  padding: 13px 30px;
+  border-radius: 8px;
+  background: #ffffff;
+  font-weight: 700;
+  color: #1f2937;
+  border: none;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.salarymgmt .section .tab-btn:hover {
+  background: rgba(102,126,234,0.1);
+  color: #667eea;
+}
+.salarymgmt .section .tab-btn.active {
+  background: linear-gradient(45deg,#354fc5,#15122f);
+  color: #fff;
+}
+
+/* Section wrapper */
+.salarymgmt .section {
+  background: #fff;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  border: 1px solid rgba(102,126,234,.1);
+}
+.salarymgmt .section h2 {
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  color: #2c3e50;
+  border-bottom: 3px solid #667eea;
+}
+
+/* Forms */
+.salarymgmt .form-group { display: flex; flex-direction: column; margin-bottom: 18px; }
+.salarymgmt label { font-weight: 600; color: #2c3e50; margin-bottom: 6px; }
+.salarymgmt input,
+.salarymgmt select {
+  padding: 12px;
+  border: 2px solid #e0e6ed;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: .3s;
+  background: #fff;
+  padding-top: 5px;
+}
+.salarymgmt input:focus,
+.salarymgmt select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102,126,234,.1);
+}
+
+/* Actions (buttons row) */
+.salarymgmt .actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 10px 0 18px;
+}
+
+/* Buttons */
+.salarymgmt .btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform .3s ease, box-shadow .3s ease;
+  color: #fff;
+}
+.salarymgmt .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,.2); }
+.salarymgmt .btn-primary { background: linear-gradient(45deg,#354fc5,#15122f); }
+.salarymgmt .btn-success { background: linear-gradient(45deg,#11998e,#38ef7d); }
+.salarymgmt .btn-warning { background: linear-gradient(45deg,#22b845,#1bb82a); }
+.salarymgmt .btn-danger  { background: linear-gradient(45deg,#e72121,#e72121); }
+
+/* Calculation mini dashboard */
+.salarymgmt .calc {
+  margin-top: 18px;
+  background: linear-gradient(135deg,#667eea,#764ba2);
+  color: #fff;
+  border-radius: 12px;
+  padding: 18px;
+}
+.salarymgmt .calc h3 { margin-bottom: 10px; }
+.salarymgmt .grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(170px,1fr)); gap: 10px; }
+.salarymgmt .tile { background: rgba(255,255,255,.12); border-radius: 10px; padding: 12px; text-align: center; }
+.salarymgmt .tile h4 { font-size: 13px; opacity: .9; margin-bottom: 6px; }
+.salarymgmt .tile .amt { font-size: 18px; font-weight: 800; }
+
+/* Table (if added later) */
+.salarymgmt table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,.08);
+}
+.salarymgmt th {
+  background: linear-gradient(45deg,#667eea,#764ba2);
+  color: #fff;
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+}
+.salarymgmt td { padding: 15px; border-bottom: 1px solid #e0e6ed; }
+.salarymgmt tbody tr:hover { background: #f8f9ff; }
+
+/* (Optional) Modal styles if you reuse the same modal pattern here */
+.salarymgmt .salary-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(5px);
+}
+.salarymgmt .salary-modal-content {
+  background: #fff;
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.3);
+}
+.salarymgmt .salary-modal-close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.salarymgmt .salary-modal-close:hover { color: #000; }
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .salarymgmt .section .nav { flex-direction: column; }
+}

@@ -1,0 +1,293 @@
+// BackEnd/Controllers/PurchaseController.js
+const Purchase = require("../Model/PurchaseModel");
+
+let Inventory = null;
+try { Inventory = require("../Model/InventoryModel"); } catch (_) { Inventory = null; }
+
+/* ---------- helpers ---------- */
+const toDateOrUndefined = (v) => {
+  if (!v) return undefined;
+  const d = new Date(v);
+  return isNaN(d.getTime()) ? undefined : d;
+};
+const toInt = (v, def = NaN) => {
+  const n = Number(v);
+  return Number.isInteger(n) ? n : def;
+};
+
+const sanitizeCreate = (body) => {
+  const itemId = (body.itemId ?? "").toString().trim();
+  const itemName = (body.itemName ?? "").toString().trim();
+  const quantity = toInt(body.quantity, NaN);
+
+  return {
+    id: (body.id ?? "").toString().trim(),
+    supplier: (body.supplier ?? "").toString().trim(),
+    itemId,
+    itemName,
+    quantity,
+    items: (body.items ?? "").toString(), // legacy
+    orderDate: toDateOrUndefined(body.orderDate) ?? new Date(),
+    deliveryDate: toDateOrUndefined(body.deliveryDate),
+    status: ["pending","approved","delivered","cancelled"].includes(body.status) ? body.status : "pending",
+    priority: ["normal","high","urgent"].includes(body.priority) ? body.priority : "normal",
+    notes: (body.notes ?? "").toString(),
+  };
+};
+
+const sanitizeUpdate = (body) => {
+  const out = {};
+  if (body.supplier !== undefined) out.supplier = String(body.supplier ?? "").trim();
+  if (body.itemId !== undefined) out.itemId = String(body.itemId ?? "").trim();
+  if (body.itemName !== undefined) out.itemName = String(body.itemName ?? "").trim();
+  if (body.quantity !== undefined) {
+    const q = toInt(body.quantity, NaN);
+    if (!Number.isInteger(q) || q < 1) {
+      const e = new Error("quantity must be a positive integer"); e.status = 400; throw e;
+    }
+    out.quantity = q;
+  }
+  if (body.items !== undefined) out.items = String(body.items ?? "");
+  if (body.orderDate !== undefined) out.orderDate = toDateOrUndefined(body.orderDate);
+  if (body.deliveryDate !== undefined) out.deliveryDate = toDateOrUndefined(body.deliveryDate);
+  if (body.status !== undefined) {
+    if (!["pending","approved","delivered","cancelled"].includes(body.status)) {
+      const e = new Error("Invalid status"); e.status = 400; throw e;
+    }
+    out.status = body.status;
+  }
+  if (body.priority !== undefined) {
+    if (!["normal","high","urgent"].includes(body.priority)) {
+      const e = new Error("Invalid priority"); e.status = 400; throw e;
+    }
+    out.priority = body.priority;
+  }
+  if (body.notes !== undefined) out.notes = String(body.notes ?? "");
+  return out;
+};
+
+async function allocateNextBusinessId() {
+  const last = await Purchase
+    .find({ id: { $regex: /^O-\d{3,}$/ } })
+    .sort({ createdAt: -1 })
+    .limit(200)
+    .lean();
+  let maxNum = 0;
+  for (const r of last) {
+    const m = String(r.id).match(/^O-(\d{3,})$/);
+    if (m) maxNum = Math.max(maxNum, parseInt(m[1], 10));
+  }
+  return `O-${String(maxNum + 1).padStart(3, "0")}`;
+}
+
+// ---------- inventory / reorder helpers ----------
+async function assertItemIdInInventory(itemId) {
+  if (!Inventory) return;
+  const exists = await Inventory.exists({ id: String(itemId).trim() });
+  if (!exists) {
+    const e = new Error(`Item ID "${itemId}" does not exist in Inventory`);
+    e.status = 400; throw e;
+  }
+}
+
+async function decReorderForItem(itemId, qty) {
+  if (!Inventory || !itemId || !Number.isInteger(qty) || qty <= 0) return;
+  await Inventory.updateOne({ id: String(itemId).trim() }, { $inc: { reorderAdj: -qty } });
+  await Inventory.updateOne(
+    { id: String(itemId).trim(), reorderAdj: { $lt: 0 } },
+    { $set: { reorderAdj: 0 } }
+  );
+}
+
+// Single-order application (idempotent)
+async function applyInventoryIfNeeded(order) {
+  if (!Inventory) return;
+  if (!order) return;
+  if (order.status !== "delivered") return;
+  if (order.receivedApplied === true) return;
+
+  // increment inventory for itemId
+  await Inventory.updateOne(
+    { id: String(order.itemId).trim() },
+    { $inc: { quantity: order.quantity } }
+  );
+  // mark as applied to avoid double counting
+  await Purchase.updateOne({ _id: order._id }, { $set: { receivedApplied: true } });
+
+  // ✅ decrease ROP adjustment by the received qty
+  await decReorderForItem(order.itemId, order.quantity);
+}
+
+// Batch application (for auto-marked delivered)
+async function applyInventoryForUnappliedDelivered() {
+  if (!Inventory) return;
+  const orders = await Purchase.find({
+    status: "delivered",
+    $or: [{ receivedApplied: { $exists: false } }, { receivedApplied: false }],
+  })
+    .select("_id itemId quantity")
+    .lean();
+
+  if (!orders.length) return;
+
+  const invOps = [];
+  const poOps = [];
+
+  for (const o of orders) {
+    if (!o.itemId || !Number.isInteger(o.quantity)) continue;
+    invOps.push({
+      updateOne: {
+        filter: { id: String(o.itemId).trim() },
+        update: { $inc: { quantity: o.quantity } },
+      },
+    });
+    poOps.push({
+      updateOne: {
+        filter: { _id: o._id },
+        update: { $set: { receivedApplied: true } },
+      },
+    });
+  }
+
+  if (invOps.length) await Inventory.bulkWrite(invOps, { ordered: false });
+  if (poOps.length) await Purchase.bulkWrite(poOps, { ordered: false });
+
+  // ✅ also decrease reorderAdj for each applied order
+  for (const o of orders) {
+    await decReorderForItem(o.itemId, o.quantity);
+  }
+}
+
+/* ---------- controllers ---------- */
+
+// GET /api/purchases
+const listPurchases = async (req, res, next) => {
+  try {
+    // auto-mark delivered if overdue
+    await Purchase.updateMany(
+      { status: { $in: ["pending", "approved"] }, deliveryDate: { $lte: new Date() } },
+      { $set: { status: "delivered" } }
+    );
+
+    // apply inventory & reorderAdj for delivered-but-not-applied
+    await applyInventoryForUnappliedDelivered();
+
+    const { status, supplier, q } = req.query;
+    const filter = {};
+    if (status) filter.status = status;
+    if (supplier) filter.supplier = new RegExp(String(supplier), "i");
+    if (q) filter.$text = { $search: String(q) };
+
+    const orders = await Purchase.find(filter)
+      .sort({ orderDate: 1, createdAt: 1, id: 1 })
+      .lean();
+
+    res.json({ orders });
+  } catch (e) { next(e); }
+};
+
+// GET /api/purchases/:id
+const getByBusinessId = async (req, res, next) => {
+  try {
+    const order = await Purchase.findOne({ id: String(req.params.id).trim() }).lean();
+    if (!order) return res.status(404).json({ message: `Order "${req.params.id}" not found` });
+    res.json({ order });
+  } catch (e) { next(e); }
+};
+
+// POST /api/purchases
+const createPurchase = async (req, res, next) => {
+  try {
+    const payload = sanitizeCreate(req.body);
+    if (!payload.supplier) return res.status(400).json({ message: "supplier is required" });
+    if (!payload.itemId)   return res.status(400).json({ message: "itemId is required" });
+    if (!payload.itemName) return res.status(400).json({ message: "itemName is required" });
+    if (!Number.isInteger(payload.quantity) || payload.quantity < 1) {
+      return res.status(400).json({ message: "quantity must be a positive integer" });
+    }
+
+    await assertItemIdInInventory(payload.itemId);
+
+    if (!payload.id) payload.id = await allocateNextBusinessId();
+    const exists = await Purchase.exists({ id: payload.id });
+    if (exists) return res.status(409).json({ message: `Order "${payload.id}" already exists` });
+
+    const created = await Purchase.create(payload);
+
+    // If created directly as delivered, apply immediately
+    if (created.status === "delivered") {
+      await applyInventoryIfNeeded(created.toObject());
+    }
+
+    res.status(201).json({ order: created });
+  } catch (e) {
+    if (e?.code === 11000) return res.status(409).json({ message: "Duplicate id. Order already exists." });
+    if (e.status) return res.status(e.status).json({ message: e.message });
+    next(e);
+  }
+};
+
+// PUT /api/purchases/:id
+const updateByBusinessId = async (req, res, next) => {
+  try {
+    if (req.body?.id && String(req.body.id).trim() !== String(req.params.id).trim()) {
+      return res.status(400).json({ message: "Changing 'id' is not allowed" });
+    }
+    const updates = sanitizeUpdate(req.body);
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({ message: "No valid fields provided for update" });
+    }
+    if (updates.itemId) await assertItemIdInInventory(updates.itemId);
+
+    const updated = await Purchase.findOneAndUpdate(
+      { id: String(req.params.id).trim() },
+      { $set: updates },
+      { new: true, runValidators: true }
+    );
+    if (!updated) return res.status(404).json({ message: `Order "${req.params.id}" not found` });
+
+    // If this update made it delivered, apply (if not already applied)
+    await applyInventoryIfNeeded(updated.toObject());
+
+    res.json({ order: updated });
+  } catch (e) { next(e); }
+};
+
+// DELETE /api/purchases/:id
+const removeByBusinessId = async (req, res, next) => {
+  try {
+    const result = await Purchase.deleteOne({ id: String(req.params.id).trim() });
+    if (result.deletedCount === 0) return res.status(404).json({ message: `Order "${req.params.id}" not found` });
+    res.json({ deleted: true });
+  } catch (e) { next(e); }
+};
+
+// PATCH /api/purchases/:id/status
+const updateStatus = async (req, res, next) => {
+  try {
+    const { status } = req.body;
+    if (!["pending","approved","delivered","cancelled"].includes(status)) {
+      return res.status(400).json({ message: "Invalid status" });
+    }
+    const updated = await Purchase.findOneAndUpdate(
+      { id: String(req.params.id).trim() },
+      { $set: { status } },
+      { new: true, runValidators: true }
+    );
+    if (!updated) return res.status(404).json({ message: `Order "${req.params.id}" not found` });
+
+    // If status set to delivered, apply inventory increment (+ ROP decrease)
+    await applyInventoryIfNeeded(updated.toObject());
+
+    res.json({ order: updated });
+  } catch (e) { next(e); }
+};
+
+module.exports = {
+  listPurchases,
+  getByBusinessId,
+  createPurchase,
+  updateByBusinessId,
+  removeByBusinessId,
+  updateStatus,
+};

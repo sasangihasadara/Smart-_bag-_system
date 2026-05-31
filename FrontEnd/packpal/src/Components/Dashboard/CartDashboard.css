@@ -1,0 +1,200 @@
+/* === Cart Dashboard Page Wrap ===================================== */
+.cart-page {
+  /* Theme tokens (scoped to this page) */
+  --sidebar-w: 220px;
+
+  /* Neutral UI */
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --ink: #0f172a;
+  --muted: #475569;
+  --border: #e5e7eb;
+
+  /* Light blue table palette */
+  --tbl-bg:     #f0f7ff;
+  --tbl-header: #e3efff;
+  --tbl-border: #c7ddff;
+  --tbl-ink:    #0f172a;
+  --tbl-muted:  #385ea8;
+  --tbl-hover:  #e9f2ff;
+  --tbl-zebra:  #f6faff;
+  --tbl-chip:   #dbeafe;
+
+  display: flex;                  /* sidebar + main */
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* If your Sidebarsa renders with class "sidebar", this keeps width tidy */
+.cart-page .sidebar {
+  width: var(--sidebar-w);
+  flex: 0 0 var(--sidebar-w);
+  border-right: 1px solid var(--border);
+  background: #fff;
+}
+
+/* Main content area */
+.cart-main {
+  flex: 1 1 auto;
+  min-width: 0;                   /* avoid overflow */
+  padding: 20px;
+  margin-left: 270px;
+}
+
+/* Header */
+.cart-main .dash-header h1 {
+  margin: 0 0 4px;
+  font-size: 24px;
+  font-weight: 800;
+}
+.cart-main .dash-header .muted {
+  color: var(--muted);
+}
+
+/* Sections */
+.cart-main .section {
+  margin: 16px 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.cart-main .head {
+  padding: 12px 14px;
+  background: #f3f4f6;
+  color: #374151;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Cards / stats grid */
+.cart-main .stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 12px;
+  margin: 12px 0 16px;
+}
+.cart-main .card {
+  padding: 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+/* ===== Dark Blue KPI Cards ======================================= */
+.cart-main .card.stat{
+  /* gradient dark blue; swap with solid #1e3a8a if you prefer flat */
+  background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+  border-color: #1d4ed8;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(29, 78, 216, 0.25);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.cart-main .card.stat .v { 
+  font-size: 20px; 
+  color: #fff; 
+}
+.cart-main .card.stat .l { 
+  font-size: 11px; 
+  color: rgba(255,255,255,.85); 
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.cart-main .card.stat:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(29, 78, 216, 0.35);
+}
+
+/* Table wrapper */
+.cart-main .table-wrap {
+  overflow-x: auto;
+  background: var(--tbl-bg);
+  border: 1px solid var(--tbl-border);
+  border-radius: 12px;
+}
+
+/* Base table */
+.cart-main table {
+  width: 100%;
+  min-width: 880px;
+  border-collapse: collapse;
+  background: var(--tbl-bg);
+  color: var(--tbl-ink);
+}
+
+/* Header */
+.cart-main thead th {
+  background: var(--tbl-header);
+  color: var(--tbl-muted);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-size: 11px;
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--tbl-border);
+}
+
+/* Cells */
+.cart-main th, 
+.cart-main td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--tbl-border);
+  text-align: left;
+  vertical-align: top;
+  font-size: 13px;
+  line-height: 1.25;
+  color: var(--tbl-ink);
+}
+
+/* Zebra + hover */
+.cart-main tbody tr:nth-child(even) td { background: var(--tbl-zebra); }
+.cart-main tr:hover td { background: var(--tbl-hover); }
+
+/* Links */
+.cart-main th a, 
+.cart-main td a {
+  color: #2563eb;
+  text-decoration: none;
+}
+.cart-main th a:hover, 
+.cart-main td a:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+/* Badges (optional) */
+.cart-main .badge {
+  padding: 3px 8px;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--tbl-chip);
+  color: #1e3a8a;
+  border: 1px solid var(--tbl-border);
+  border-radius: 999px;
+}
+
+/* Errors */
+.cart-main .error {
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+
+/* Mobile */
+@media (max-width: 1024px) {
+  .cart-main .stats { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 768px) {
+  .cart-page { flex-direction: column; }
+  .cart-page .sidebar { 
+    width: 100%; 
+    flex: 0 0 auto; 
+    border-right: 0; 
+    border-bottom: 1px solid var(--border); 
+  }
+  .cart-main { padding: 16px; margin-left: 0; }
+  .cart-main table { min-width: 760px; }
+}

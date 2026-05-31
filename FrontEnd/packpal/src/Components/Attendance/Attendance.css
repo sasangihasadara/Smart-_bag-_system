@@ -1,0 +1,288 @@
+/* ===========================
+   Attendance Page Styles
+   =========================== */
+
+.Attendance { padding-left: 280px; }
+@media (max-width:1024px){ .Attendance { padding-left: 0; } }
+
+.Attendance .container {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.95);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* Header */
+.Attendance .container h1{
+  font-size: 3rem;
+  font-weight: 700; 
+  margin-bottom: 10px;
+  margin-left: 260px;
+}
+.Attendance .container p{
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-left: 330px;
+}
+
+/* Section */
+.Attendance .section{
+  background:#fff;
+  border-radius:15px;
+  padding:25px;
+  margin-bottom:25px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+  border:1px solid rgba(102,126,234,.1);
+}
+
+.Attendance .section .nav{
+  margin:15px 0;
+  padding:10px;
+  background:#f9f9ff;
+  border-radius:10px;
+  box-shadow:0 2px 6px rgba(0,0,0,.05);
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+.Attendance .section .tab-btn{
+  padding: 13px 30px;
+  border-radius: 5px;
+  background: #ffffff;
+  font-weight: 700;
+  color: #1f2937;
+  border: none;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.Attendance .section .tab-btn:hover{
+  background: rgba(102,126,234,0.1);
+  color: #667eea;
+}
+.Attendance .section .tab-btn.active{
+  background: linear-gradient(45deg,#354fc5,#15122f);
+  color: #fff;
+}
+
+/* ===== Search row (like Salary) ===== */
+.Attendance .search-row{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  margin-top: 10px;
+}
+
+.Attendance .pretty-search {
+  flex: 1 1 380px;
+  max-width: 620px;
+  background: linear-gradient(180deg, #ffffff, #fafafa);
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.Attendance .pretty-search .chip {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.Attendance .pretty-search .input-wrap {
+  position: relative;
+  flex: 1;
+}
+.Attendance .pretty-search .input-wrap i.fa-hashtag {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.6;
+  font-size: 14px;
+}
+.Attendance .pretty-search .input-wrap input {
+  width: 100%;
+  padding: 10px 40px 10px 28px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  background: #fff;
+}
+.Attendance .pretty-search .input-wrap .clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+  opacity: 0.7;
+}
+.Attendance .pretty-search .count {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #F3F4F6;
+  font-size: 12px;
+  color: #111827;
+}
+
+/* helper line */
+.Attendance .helper-line{
+  font-size:12px;
+  opacity:0.7;
+  margin:6px 0 10px;
+}
+
+/* ===== Title row: Title + Add button on same line ===== */
+.Attendance .title-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.Attendance .inline-title{
+  font-size:1.6rem;
+  margin:0;
+  padding:0;
+  color:#2c3e50;
+}
+
+/* divider under the title row */
+.Attendance .section-divider{
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #a855f7);
+  border-radius: 2px;
+  margin: 8px 0 14px;
+}
+
+/* Form */
+.Attendance .form-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:15px;
+  margin-bottom:20px;
+}
+.Attendance .form-group{ display:flex; flex-direction:column;}
+.Attendance label{ font-weight:600; color:#2c3e50; margin-bottom:5px;}
+.Attendance input,
+.Attendance select{
+  padding:8px;
+  border:2px solid #e0e6ed;
+  border-radius:8px;
+  font-size:14px;
+  transition:.3s;
+}
+.Attendance input:focus,
+.Attendance select:focus{
+  outline:none;
+  border-color:#667eea;
+  box-shadow:0 0 0 3px rgba(102,126,234,.1);
+}
+
+/* Buttons */
+.Attendance .btn{
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform .3s ease, box-shadow .3s ease;
+  margin: 5px;
+  color: #fff;
+}
+.Attendance .btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 20px rgba(0,0,0,.2);
+}
+.Attendance .btn-primary{ background:linear-gradient(45deg,#354fc5,#15122f); }
+.Attendance .btn-success{ background:linear-gradient(45deg,hsl(199, 67%, 41%),#3f8d9e); }
+.Attendance .btn-warning{ background:linear-gradient(45deg,#1e7b35,#1e7b35); }
+.Attendance .btn-danger { background:linear-gradient(45deg,#e72121,#e72121); }
+
+/* Table */
+.Attendance table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
+  background:#fff;
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+.Attendance th{
+  background:linear-gradient(45deg,#354fc5,#15122f);
+  color:#fff;
+  padding:15px;
+  text-align:left;
+  font-weight:600;
+}
+.Attendance td{ padding:15px; border-bottom:1px solid #e0e6ed; }
+.Attendance tbody tr:hover{ background:#f8f9ff; }
+
+.Attendance .actions{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  align-items:center;
+}
+.Attendance .actions .btn{
+  padding:8px 16px;
+  margin:0;
+  border-radius:8px;
+  font-size:.85rem;
+  box-shadow:none;
+}
+
+/* Modal */
+.att-modal{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  background:rgba(0,0,0,.45);
+  backdrop-filter:blur(2px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.att-modal-content{
+  background:#fff;
+  width:90%;
+  max-width:560px;
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 20px 40px rgba(0,0,0,.25);
+  position:relative;
+}
+.att-modal-close{
+  position:absolute;
+  top:10px;
+  right:12px;
+  border:0;
+  background:transparent;
+  font-size:28px;
+  line-height:1;
+  cursor:pointer;
+}
+
+/* Responsive */
+@media (max-width:768px){
+  .Attendance { padding-left:0; }
+  .Attendance .pretty-search { flex: 1 1 100%; }
+  .Attendance .title-row { gap: 10px; }
+  .Attendance .title-row .btn { width: auto; }
+  .Attendance .section .nav{ flex-direction:column; }
+}
+
+/* Ensure last cell buttons inline */
+.Attendance td.actions { white-space: nowrap; }

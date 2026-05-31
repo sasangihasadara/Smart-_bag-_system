@@ -1,0 +1,178 @@
+/* =========================
+   PackPal Inventory v2 (scoped, high-specificity)
+   Namespace: .ppv2
+   ========================= */
+
+.ppv2{ /* page background next to the sidebar */
+  display:flex;
+  min-height:100vh;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #F2F6FF, transparent 55%),
+    linear-gradient(180deg, #F7FAFF, #F2F6FF);
+}
+
+/* ensure main content spacing wins */
+.ppv2 .main-content{
+  flex:1 1 auto;
+  min-width:0;
+  padding:28px 10px 40px;
+  margin-left: 290px;
+}
+
+/* big rounded white container like your 2nd screenshot */
+.ppv2 .dashboard{
+  max-width:1400px;
+  margin:0 auto;
+  background:#fff;
+  border-radius:22px;
+  padding:28px;
+  box-shadow:0 24px 48px rgba(15,23,42,.10);
+  border:1px solid #eef2ff;
+}
+
+/* header */
+.ppv2 .header{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  padding-bottom:18px;
+  margin-bottom:18px;
+  border-bottom:1px solid #eef2ff;
+}
+.ppv2 .header h1{
+  font-size:30px;
+  font-weight:700;
+  color:#1f2937;
+}
+.ppv2 .header .date{ font-size:13px; color:#6b7280; }
+
+/* metric cards row */
+.ppv2 .metrics-row{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:28px;
+  margin-bottom:28px;
+}
+
+/* glossy purple stat cards with soft bubbles */
+.ppv2 .metric-card{
+  position:relative;
+  overflow:hidden;
+  border-radius:20px;
+  padding:25px 30px;
+  color:#fff;
+  background: linear-gradient(135deg,#667eea,#764ba2);
+  box-shadow:0 18px 28px rgba(92,64,187,.30);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.ppv2 .metric-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 26px 38px rgba(92,64,187,.35);
+}
+.ppv2 .metric-card::before,
+.ppv2 .metric-card::after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  background:#ffffff1f;
+  filter:blur(.5px);
+}
+.ppv2 .metric-card::before{ width:140px;height:140px; right:-30px; top:-30px; }
+.ppv2 .metric-card::after { width:20px;height:220px; right:-90px; bottom:-60px; }
+
+.ppv2 .metric-value{ font-size:34px; font-weight:900; letter-spacing:.4px; margin-bottom:6px; }
+.ppv2 .metric-label{ font-size:12px; letter-spacing:1.2px; text-transform:uppercase; opacity:.95; }
+
+/* charts + alerts panels */
+.ppv2 .charts-alerts-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:28px;
+  margin-bottom:28px;
+}
+.ppv2 .chart-container,
+.ppv2 .alerts-panel{
+  background:#fff;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 14px 28px rgba(15,23,42,.12);
+  border:1px solid #eef2ff;
+  height:460px;
+}
+.ppv2 .panel-title{ font-size:18px; font-weight:700; color:#1f2937; margin-bottom:16px; }
+
+/* chart block */
+.ppv2 .stock-chart-wrapper{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:28px; height:calc(100% - 60px);
+}
+.ppv2 .pie-chart-container{
+  width:260px; height:260px; display:flex; align-items:center; justify-content:center;
+}
+.ppv2 .chart-legend{ display:flex; flex-direction:column; gap:18px; }
+.ppv2 .legend-item{ display:flex; align-items:center; gap:12px; }
+.ppv2 .legend-color{ width:18px; height:18px; border-radius:6px; }
+.ppv2 .legend-text{ font-size:14px; color:#334155; font-weight:600; }
+
+/* alerts list */
+.ppv2 .alerts-content{ height:calc(100% - 10px); overflow:auto; padding-right:6px; }
+.ppv2 .alert-item{
+  display:flex; align-items:center; gap:14px;
+  background:#fff7f7; border:1px solid #ffe3e3; border-left:4px solid #ef4444;
+  border-radius:14px; padding:14px 16px; margin-bottom:12px;
+}
+.ppv2 .alert-icon{
+  width:22px; height:22px; border-radius:50%;
+  background:#ef4444; color:#fff; display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:12px;
+}
+.ppv2 .alert-title{ font-weight:700; color:#1f2937; font-size:14px; margin-bottom:2px; }
+.ppv2 .alert-description{ color:#6b7280; font-size:12px; }
+
+/* table */
+.ppv2 .inventory-table{
+  background:#fff; border-radius:18px; padding:22px;
+  box-shadow:0 14px 28px rgba(15,23,42,.12); border:1px solid #eef2ff;
+}
+.ppv2 .table-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+.ppv2 .table-title{ font-size:20px; font-weight:800; color:#1f2937; }
+
+.ppv2 .search-box{
+  width:220px; padding:10px 14px; border-radius:999px;
+  border:2px solid #e5e7eb; background:#fff; font-size:14px; outline:none;
+  transition:border-color .2s ease, box-shadow .2s ease;
+}
+.ppv2 .search-box:focus{ border-color:#6366f1; box-shadow:0 0 0 4px rgba(99,102,241,.12); }
+
+.ppv2 table{ width:100%; border-collapse:collapse; }
+.ppv2 th, .ppv2 td{ padding:14px 12px; text-align:left; border-bottom:1px solid #f1f5f9; }
+.ppv2 th{
+  background:#f8fafc; font-size:12px; letter-spacing:1px; text-transform:uppercase; color:#334155;
+}
+
+/* status pills */
+.ppv2 .status{ display:inline-block; padding:6px 12px; border-radius:999px; font-size:11px; font-weight:800; letter-spacing:.6px; text-transform:uppercase; }
+.ppv2 .status.in-stock{ background:#d1fae5; color:#065f46; }
+.ppv2 .status.low-stock{ background:#fff7cd; color:#915600; }
+.ppv2 .status.out-of-stock{ background:#fde2e1; color:#9f1239; }
+
+/* inline error */
+.ppv2 .inline-alert{
+  margin:12px 0 18px; padding:12px 14px; border-radius:12px;
+  background:#fee2e2; color:#991b1b; border:1px solid #fecaca;
+}
+
+/* responsive */
+@media (max-width:1024px){
+  .ppv2 .charts-alerts-row{ grid-template-columns:1fr; }
+  .ppv2 .chart-container, .ppv2 .alerts-panel{ height:auto; min-height:380px; }
+  .ppv2 .stock-chart-wrapper{ flex-direction:column; text-align:center; }
+  .ppv2 .pie-chart-container{ width:220px; height:220px; }
+}
+@media (max-width:640px){
+  .ppv2 .main-content{ padding:18px; }
+  .ppv2 .dashboard{ padding:18px; border-radius:18px; }
+  .ppv2 .metrics-row{ gap:18px; }
+  .ppv2 .metric-card{ padding:18px; }
+  .ppv2 .metric-value{ font-size:30px; }
+}

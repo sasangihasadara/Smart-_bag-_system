@@ -1,0 +1,17 @@
+// BackEnd/Route/InventoryRoute.js
+const express = require("express");
+const router = express.Router();
+
+const inv = require("../Controllers/InventoryController");
+
+router.get("/", inv.listInventory);
+router.get("/summary", inv.summary);          // ← now supports ?start&end
+router.get("/summary-v2", inv.summaryV2);     // month-aware createdAt buckets
+
+router.get("/:id", inv.getByBusinessId);
+router.post("/", inv.createItem);
+router.put("/:id", inv.updateByBusinessId);
+router.delete("/:id", inv.removeByBusinessId);
+router.post("/:id/reorder-adjust", inv.adjustReorder);
+
+module.exports = router;

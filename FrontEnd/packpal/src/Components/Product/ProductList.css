@@ -1,0 +1,161 @@
+/* --- Layout tokens --- */
+:root{
+  --bg:#f1f5f9; --card:#fff; --text:#0f172a; --muted:#637087; --border:#e5e7eb;
+  --primary:#2563eb; --danger:#ef4444; --ok:#16a34a; --amber:#f59e0b; --slate:#1f2937;
+  --sidebar-w: 220px;
+}
+
+/* === Page wrap (use block because sidebar is fixed) === */
+.page-wrap.products-page{
+  --border:#e5e7eb;
+  display:block;
+  min-height:100vh;
+  background:var(--bg);
+}
+
+/* Fixed sidebar (desktop) */
+.page-wrap.products-page .sidebar{
+  position:fixed;
+  top:0; left:0; bottom:0;
+  width:var(--sidebar-w);
+  border-right:1px solid var(--border);
+  background:#fff;
+  z-index:10;                 /* above page content */
+  overflow-y:auto;
+}
+
+/* Main content offset to the right of the fixed sidebar */
+.page-wrap.products-page .content.products-page{
+  margin-left:var(--sidebar-w);
+  flex:1 1 auto;
+  min-width:0;
+}
+
+/* Collapse sidebar on tablets/phones */
+@media (max-width:1024px){
+  .page-wrap.products-page .sidebar{
+    position:static;
+    width:100%;
+    height:auto;
+    border-right:0;
+    border-bottom:1px solid var(--border);
+  }
+  .page-wrap.products-page .content.products-page{
+    margin-left:0;
+  }
+}
+
+/* Light Blue Table Theme (scoped to this page) */
+.content.products-page{
+  --tbl-bg:#f0f7ff; --tbl-header:#e3efff; --tbl-border:#c7ddff; --tbl-ink:#0f172a;
+  --tbl-muted:#385ea8; --tbl-hover:#e9f2ff; --tbl-zebra:#f6faff; --tbl-chip:#dbeafe;
+}
+
+/* Page layout */
+.content.products-page{
+  padding:20px 24px;
+  min-height:100vh;
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+.page-title{ margin:0 0 8px; font-size:38px; font-weight:900; letter-spacing:.01em; }
+.muted{ color:var(--muted); font-size:13px; }
+
+/* Card / section */
+.section{
+  background:#fff; border:1px solid var(--border); border-radius:14px;
+  overflow:hidden; box-shadow:0 1px 2px rgba(0,0,0,.04); margin:18px 0;
+}
+.head{ display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid var(--border); }
+.body{ padding:16px; }
+
+/* Buttons */
+.actions{ display:flex; gap:8px; flex-wrap:wrap; }
+.btn{
+  display:inline-flex; align-items:center; gap:8px; padding:8px 12px;
+  border-radius:10px; border:1px solid var(--border); background:#fff;
+  cursor:pointer; font-weight:600; transition:.15s ease;
+}
+.btn:hover{ filter:brightness(.97); transform: translateY(-1px); box-shadow:0 8px 18px rgba(2,6,23,.06); }
+.btn:focus-visible{ outline:3px solid rgba(37,99,235,.35); outline-offset:2px; }
+.btn.primary{ background:var(--primary); color:#fff; border-color:var(--primary); }
+.btn.green{ background:var(--ok); color:#fff; border-color:var(--ok); }
+.btn.red{ background:var(--danger); color:#fff; border-color:var(--danger); }
+
+/* ONLY the row "Edit" button = light green */
+.content.products-page td .actions .btn:first-child{ background:#d1fae5; color:#065f46; border-color:#a7f3d0; }
+.content.products-page td .actions .btn:first-child:hover{ background:#bbf7d0; border-color:#86efac; }
+.content.products-page td .actions .btn:first-child:focus-visible{ outline:3px solid rgba(5,150,105,.35); outline-offset:2px; }
+
+/* Tables */
+.table-wrap{ overflow-x:hidden; }
+.content.products-page table{ background:var(--tbl-bg); color:var(--tbl-ink); border-color:var(--tbl-border); border-collapse:collapse; width:100%; }
+.content.products-page thead th{
+  background:var(--tbl-header); color:var(--tbl-muted); text-transform:uppercase;
+  font-size:12px; letter-spacing:.04em; border-bottom:1px solid var(--tbl-border);
+}
+.content.products-page th, .content.products-page td{
+  padding:12px 14px; border-bottom:1px solid var(--tbl-border); text-align:left; vertical-align:top; font-size:14px;
+  white-space:normal; word-break:break-word; overflow-wrap:anywhere; color:var(--tbl-ink);
+}
+.content.products-page tbody tr:nth-child(even) td{ background:var(--tbl-zebra); }
+.content.products-page tr:hover td{ background:var(--tbl-hover); }
+
+.right{ text-align:right; }
+.center{ text-align:center; }
+
+/* Images */
+.pimg{ width:56px; height:56px; object-fit:cover; border-radius:10px; border:1px solid var(--border); background:#fff; }
+
+/* ================= Modal ================= */
+.backdrop{
+  position:fixed; inset:0; background:rgba(0,0,0,.45);
+  display:flex; align-items:center; justify-content:center;
+  z-index:2147483647;       /* always above the fixed sidebar */
+  padding:16px;
+}
+.modal{
+  background:#fff; width:min(96vw, 980px); max-width:980px;
+  border-radius:16px; border:1.5px solid var(--border); overflow:hidden;
+  box-shadow:0 30px 80px rgba(2,6,23,.35);
+}
+.modal-head{ display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid var(--border); background:#eaf2ff; }
+.modal-body{ padding:16px; background:linear-gradient(180deg,#f4f8ff,#ffffff 160px); }
+.modal-foot{ padding:14px 16px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px; background:#fff; }
+.x{ background:transparent; border:0; font-size:22px; cursor:pointer; }
+
+/* Light-blue inputs */
+.input,
+.modal input[type="text"],
+.modal input[type="number"],
+.modal input[type="file"] + input{
+  width:100%; padding:12px 12px; border-radius:12px;
+  border:1.5px solid #bfdbfe; background:#eff6ff; color:var(--text);
+  transition:border-color .15s ease, box-shadow .15s ease, background .15s ease; box-sizing:border-box;
+}
+.input::placeholder, .modal input::placeholder{ color:#94a3b8; }
+.input:focus, .modal input[type="text"]:focus, .modal input[type="number"]:focus{
+  outline:none; border-color:#3b82f6; background:#fff; box-shadow:0 0 0 4px rgba(59,130,246,.15);
+}
+.input.error{ border-color:#ef4444; background:#fff; box-shadow:0 0 0 4px rgba(239,68,68,.12); }
+.err-text{ margin-top:6px; color:#dc2626; font-size:12px; }
+small.muted{ display:block; color:var(--muted); margin-top:4px; }
+.modal .pimg{ width:72px; height:72px; object-fit:cover; border-radius:10px; border:1px solid #bfdbfe; background:#fff; }
+
+/* Form grid – 3 columns by default */
+.grid{ display:grid; gap:14px 16px; align-items:start; }
+.grid-3{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.modal .grid > *{ min-width:0; }
+@media (max-width:1100px){ .grid-3{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width:640px){ .grid-3{ grid-template-columns: 1fr; } }
+
+/* Responsive tweaks for the page tables */
+@media (max-width:1024px){
+  .content.products-page{ padding:16px; }
+  th, td{ padding:10px 12px; }
+}
+@media (max-width:768px){
+  .pimg{ width:48px; height:48px; }
+  .page-title{ font-size:30px; }
+}
