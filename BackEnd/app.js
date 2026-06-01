@@ -65,6 +65,15 @@ app.use(
 
 app.use(express.json());
 
+app.use((req, res, next) => {
+  if (req.path.startsWith("/api/") && !dbConnected) {
+    return res.status(503).json({
+      message: "Service unavailable: database is not connected. Check MongoDB settings and network access.",
+    });
+  }
+  next();
+});
+
 app.get("/", (_req, res) => res.send("PackPal backend running"));
 app.get("/health", (_req, res) =>
   res.json({
